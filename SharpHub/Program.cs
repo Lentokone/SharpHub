@@ -20,6 +20,8 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+//Gpt sanoi ett‰ t‰n tarvii jos haluaa k‰ytt‰‰ api kutsua cli kautta
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
