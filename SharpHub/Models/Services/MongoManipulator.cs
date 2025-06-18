@@ -28,13 +28,76 @@ namespace SharpHub.Models.Services
 
         public static IMongoDatabase GetDB()
         {
-            if (database == null) {
+            if (database == null)
+            {
                 throw new Exception("Database not initialized. Call Initialize first.");
             }
             else
             {
                 return database;
             }
+        }
+
+        public static T Save<T>(T record) where T : DB_SaveableObject
+        {
+            try
+            {
+                var collection = GetDB().GetCollection<T>(typeof(T).Name);
+
+                if (record._id == ObjectId.Empty)
+                {
+                    collection.InsertOne(record);
+                }
+                else
+                {
+                    var filter = Builders<T>.Filter.Eq("_id", record._id);
+                    var existingDocument = collection.Find(filter).FirstOrDefault();
+                    
+                    if (existingDocument != null)
+                    {
+                        collection.ReplaceOne(filter, record);
+                    }
+                    else
+                    {
+                        collection.InsertOne(record);
+                    }
+                    
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving record: {ex.Message}");
+            }
+            return record;
+        }
+
+        public static T Search<T>(T record) where T : DB_SaveableObject
+        {
+            var MongoTable = GetDB().GetCollection<T>(typeof(T).Name);
+
+            // Etsitään ensimmäinen ei-null-arvoinen ominaisuus dynaamisesti
+            var property = typeof(T).GetProperties()
+                .FirstOrDefault(p => p.GetValue(record) != null);
+
+            // Jos ei löydy kelvollista ominaisuutta, heitetään poikkeus
+            if (property == null)
+            {
+                throw new ArgumentException($"Ei löytynyt kelvollista ominaisuutta {typeof(T).Name} luokasta hakua varten.");
+            }
+
+            // Haetaan ominaisuuden arvo, jota käytetään haussa
+            var fieldValue = property.GetValue(record);
+            if (fieldValue == null)
+            {
+                throw new ArgumentException($"Ominaisuus {property.Name} ei voi olla null haussa.");
+            }
+
+            // Luodaan suodatin hakua varten, jossa verrataan ominaisuuden nimeä ja arvoa
+            var filter = Builders<T>.Filter.Eq<object>(property.Name, fieldValue);
+
+            // Palautetaan ensimmäinen löydetty dokumentti tai null, jos ei löydy
+            return MongoTable.Find(filter).FirstOrDefault();
         }
     }
 }

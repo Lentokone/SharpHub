@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <Folder Include="Views\Account\" />
-=======
     <PackageReference Include="MongoDB.Bson" Version="3.4.0" />
     <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
->>>>>>> cdaf0c70de469c97abcc240c05f242af39206924
   </ItemGroup>
 
 </Project>
