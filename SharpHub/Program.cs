@@ -1,9 +1,20 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SharpHub.Models.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Home/Index";
+        options.ExpireTimeSpan = TimeSpan.FromDays(5);
+        options.Cookie.Name = "Super_non_obvious_cookiename_PFTracker";
+        options.AccessDeniedPath = "/Home/Index";
+    });
 
 MongoManipulator.Initialize(builder.Configuration);
 
@@ -20,6 +31,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
