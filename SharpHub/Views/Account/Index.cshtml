@@ -14,11 +14,11 @@
             {
                 if (Model.Register.RegisterStatus == false)
                 {
-                    <partial name="_Login" model="Model.Login" />
+                    <partial name="_Register" model="Model.Register" />
                 }
                 else
                 {
-                    <partial name="_Register" model="Model.Register" />
+                    <partial name="_Login" model="Model.Login" />
                 }
             }
             else
@@ -35,10 +35,10 @@
             var target = $(this).data("target");
             $.ajax({
                 type: "post",
-                url: "/Account/_" + target,
+                url: "/Account/" + target + "Partial",
                 success: function (data) {
-                    $("#main-content").fadeOut(50, function () {
-                        $(this).html(data).fadeIn(50);
+                    $("#main-content").fadeOut(20, function () {
+                        $(this).html(data).fadeIn(20);
                     });
                 }
             });

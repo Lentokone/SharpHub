@@ -15,16 +15,16 @@ namespace SharpHub.Controllers
         }
 
         [HttpPost]
-        public IActionResult _Login()
+        public IActionResult LoginPartial()
         {
-            return PartialView();
+            return PartialView("_Login");
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Login(UserLoginViewModel vm)
         {
-            if (ModelState.IsValid)
-            {
+            if (ModelState.IsValid && !string.IsNullOrEmpty(vm.Username) && !string.IsNullOrEmpty(vm.Password))
+            { 
                 var loginman = new User
                 {
                     Username = vm.Username,
@@ -69,7 +69,7 @@ namespace SharpHub.Controllers
             }
             var Bigvm = new AccountIndexViewModel
             {
-                Login = vm
+                Login = vm,
             };
             return View("Index", Bigvm);
         }
@@ -78,12 +78,20 @@ namespace SharpHub.Controllers
         // Tähän napataan se RateLimit Nuugetti paketti.
         // Ja annettu on model jossa on user credentials ja sitten super secret string, joka tarkistetaan.
         [HttpPost("consolelogin")]
-        public IActionResult ConsoleLogin([FromBody] String loginkontsat)
+        public IActionResult ConsoleLogin([FromBody] UserLoginForCLI loginkontsat)
         {
             string monkey = "monkey";
-            if (string.IsNullOrEmpty(loginkontsat) || loginkontsat != "monkey")
+
+            if (loginkontsat != null)
             {
-                return BadRequest("Invalid login credentials.");
+                //return BadRequest("Invalid login credentials.");
+
+                var loginman = new User
+                {
+                    Username = loginkontsat.Username,
+                    Password = loginkontsat.Password
+                };
+
             }
             return Ok(monkey);
         }
@@ -96,51 +104,55 @@ namespace SharpHub.Controllers
         }
 
         [HttpPost]
-        public IActionResult _Register()
+        public IActionResult RegisterPartial()
         {
-            return PartialView();
+            return PartialView("_Register");
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Register(UserRegisterViewModel vm)
         {
-            // Check if the username already exists
-            var existingUser = MongoManipulator.Search(new User { Username = vm.Username });
-
-            if (!ModelState.IsValid || existingUser != null)
-            {
-                // If the username exists or model is invalid, add an error and return
-                if (existingUser != null)
-                {
-                    ModelState.AddModelError("Username", "Username already taken.");
-                }
-
-                // Return to the Index view with the Register view model (including any validation errors)
-                var BigvmForError = new AccountIndexViewModel
-                {
-                    Register = vm,
-                    Login = new UserLoginViewModel()
-                };
-                BigvmForError.Register.RegisterStatus = true; // Keeps the register form visible on error
-                return View("Index", BigvmForError);
-            }
-
-            // If registration is valid, create and save the new user
-            var user = new User
-            {
-                Username = vm.Username,
-                Password = vm.Password
-            };
-            MongoManipulator.Save(user);
-
-            // After successful registration, set RegisterStatus to true to show the login form
-            var BigvmForSuccess = new AccountIndexViewModel
+            var responseVm = new AccountIndexViewModel
             {
                 Register = vm,
                 Login = new UserLoginViewModel()
             };
-            BigvmForSuccess.Register.RegisterStatus = false; // Hide register form and show login
-            return View("Index", BigvmForSuccess);
+
+            if (!ModelState.IsValid)
+            {
+                // You can still check username availability as an extra step, but maybe unnecessary here
+                if (!string.IsNullOrWhiteSpace(vm.Username))
+                {
+                    var existingUser = MongoManipulator.Search(new User { Username = vm.Username });
+                    if (existingUser != null)
+                    {
+                        ModelState.AddModelError("Username", "Username already taken.");
+                        ViewData["ErrorMessage"] = "Username already taken.";
+                    }
+                }
+
+                vm.RegisterStatus = false; // Keep register form visible
+                return View("Index", responseVm);
+            }
+
+            // Check if username is taken
+            var duplicate = MongoManipulator.Search(new User { Username = vm.Username });
+            if (duplicate != null)
+            {
+                ModelState.AddModelError("Username", "Username already taken.");
+                ViewData["ErrorMessage"] = "Username already taken.";
+                vm.RegisterStatus = false;
+                return View("Index", responseVm);
+            }
+
+            MongoManipulator.Save(new User
+            {
+                Username = vm.Username,
+                Password = vm.Password
+            });
+
+            responseVm.Register.RegisterStatus = true;
+            return View("Index", responseVm);
         }
     }
 }
