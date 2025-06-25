@@ -73,28 +73,6 @@ namespace SharpHub.Controllers
             };
             return View("Index", Bigvm);
         }
-        // Tällä psh komennolla saa kiinni.
-        // Invoke-RestMethod -Uri http://localhost:5227/consolelogin -Method POST -Body '"monkey"' -ContentType 'application/json'
-        // Tähän napataan se RateLimit Nuugetti paketti.
-        // Ja annettu on model jossa on user credentials ja sitten super secret string, joka tarkistetaan.
-        [HttpPost("consolelogin")]
-        public IActionResult ConsoleLogin([FromBody] UserLoginForCLI loginkontsat)
-        {
-            string monkey = "monkey";
-
-            if (loginkontsat != null)
-            {
-                //return BadRequest("Invalid login credentials.");
-
-                var loginman = new User
-                {
-                    Username = loginkontsat.Username,
-                    Password = loginkontsat.Password
-                };
-
-            }
-            return Ok(monkey);
-        }
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Logout()
