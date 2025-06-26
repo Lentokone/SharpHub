@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
+using SharpHub.Models.Services;
+using System;
+using System.Runtime.ConstrainedExecution;
 
 namespace SharpHub.Controllers
 {
@@ -24,21 +27,44 @@ namespace SharpHub.Controllers
         [HttpPost("consolelogin")]
         public IActionResult ConsoleLogin([FromBody] UserLoginForCLI loginkontsat)
         {
+            // Testaus string
             string monkey = "monkey balls";
 
             if (loginkontsat != null)
             {
-                //return BadRequest("Invalid login credentials.");
-
+                ////return BadRequest("Invalid login credentials.");
                 var clilogin = new User
                 {
                     Username = loginkontsat.Username,
                     Password = loginkontsat.Password
                 };
+                var vastaavuus = MongoManipulator.Search(clilogin);
+                ////if (vastaavuus == null || vastaavuus.Password != loginkontsat.Password)
+                ////{
+                ////    return BadRequest("Invalid login credentials.");
+                ////}
+                if (vastaavuus != null)
+                {
+                    monkey = $"User {vastaavuus.Username} authenticated successfully.";
 
+                }
+                else { monkey = "paska"; }
+                    //monkey = clilogin.Username.ToString();
+                    return Ok(monkey);
             }
-            return Ok(monkey);
+            else
+            {
+                return Ok(monkey);
+            }
         }
+        // Nonni. 27/06/2025 2:05 Tuo nyt jotenkin voi vastaanottaa User creds
+        //
+        // Tällä komennolla
+        // $ curl -H "Content-Type: application/json" -d '{ "Username" : "testi1", "Password" : "123" }' https://localhost:7173/api/cli/auth/consolelogin
+            //% Total    % Received % Xferd Average Speed Time    Time Time  Current
+            //                                Dload  Upload Total   Spent Left  Speed
+            //100    84    0    39  100    45   4549   5249 --:--:-- --:--:-- --:--:-- 10500User testi1 authenticated successfully.
+
 
         // Ja sitten se funktio, joka tekee sen JWT generation
         // Funktio joka tekee sen SSH key generoinnin per user per repo.
