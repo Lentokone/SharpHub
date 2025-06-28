@@ -10,10 +10,6 @@ namespace SharpHub.Controllers
     [Route("api/cli/auth")]
     public class SharpGitController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
         //   http://localhost:5227/api/cli/auth/consolelogin
 
         // Tässä parempi komento testata
@@ -32,23 +28,21 @@ namespace SharpHub.Controllers
 
             if (loginkontsat != null)
             {
-                ////return BadRequest("Invalid login credentials.");
                 var clilogin = new User
                 {
                     Username = loginkontsat.Username,
                     Password = loginkontsat.Password
                 };
                 var vastaavuus = MongoManipulator.Search(clilogin);
-                ////if (vastaavuus == null || vastaavuus.Password != loginkontsat.Password)
-                ////{
-                ////    return BadRequest("Invalid login credentials.");
-                ////}
+                if (vastaavuus == null || vastaavuus.Password != loginkontsat.Password)
+                {
+                    return BadRequest("Invalid login credentials.");
+                }
                 if (vastaavuus != null)
                 {
                     monkey = $"User {vastaavuus.Username} authenticated successfully.";
-
                 }
-                else { monkey = "paska"; }
+                else { monkey = "Joku ei toiminut"; }
                     //monkey = clilogin.Username.ToString();
                     return Ok(monkey);
             }
@@ -57,6 +51,10 @@ namespace SharpHub.Controllers
                 return Ok(monkey);
             }
         }
+        //28/06/2025
+        // Eli tuo saisi palauttaa sen JWT tokenin ja SSH keyn.
+
+
         // Nonni. 27/06/2025 2:05 Tuo nyt jotenkin voi vastaanottaa User creds
         //
         // Tällä komennolla
