@@ -21,20 +21,20 @@ namespace SharpHub.Controllers
         // Tähän napataan se RateLimit Nuugetti paketti.
         // Ja annettu on model jossa on user credentials ja sitten super secret string, joka tarkistetaan.
         [HttpPost("consolelogin")]
-        public IActionResult ConsoleLogin([FromBody] UserLoginForCLI loginkontsat)
+        public IActionResult ConsoleLogin([FromBody] UserLoginForCLI cliLoginContent)
         {
             // Testaus string
             string monkey = "monkey balls";
 
-            if (loginkontsat != null)
+            if (cliLoginContent != null)
             {
                 var clilogin = new User
                 {
-                    Username = loginkontsat.Username,
-                    Password = loginkontsat.Password
+                    Username = cliLoginContent.Username,
+                    Password = cliLoginContent.Password
                 };
                 var vastaavuus = MongoManipulator.Search(clilogin);
-                if (vastaavuus == null || vastaavuus.Password != loginkontsat.Password)
+                if (vastaavuus == null || vastaavuus.Password != cliLoginContent.Password)
                 {
                     return BadRequest("Invalid login credentials.");
                 }
@@ -43,14 +43,17 @@ namespace SharpHub.Controllers
                     monkey = $"User {vastaavuus.Username} authenticated successfully.";
                 }
                 else { monkey = "Joku ei toiminut"; }
-                    //monkey = clilogin.Username.ToString();
-                    return Ok(monkey);
+                //monkey = clilogin.Username.ToString();
+                return Ok(monkey);
             }
             else
             {
                 return Ok(monkey);
             }
         }
+        //! 30/06/2025
+        // Eli ideana olisi sitten myös olla Refresh token, jota käytetään, jos JWT token on vanhentunut.
+
         //28/06/2025
         // Eli tuo saisi palauttaa sen JWT tokenin ja SSH keyn.
 
@@ -59,9 +62,9 @@ namespace SharpHub.Controllers
         //
         // Tällä komennolla
         // $ curl -H "Content-Type: application/json" -d '{ "Username" : "testi1", "Password" : "123" }' https://localhost:7173/api/cli/auth/consolelogin
-            //% Total    % Received % Xferd Average Speed Time    Time Time  Current
-            //                                Dload  Upload Total   Spent Left  Speed
-            //100    84    0    39  100    45   4549   5249 --:--:-- --:--:-- --:--:-- 10500User testi1 authenticated successfully.
+        //% Total    % Received % Xferd Average Speed Time    Time Time  Current
+        //                                Dload  Upload Total   Spent Left  Speed
+        //100    84    0    39  100    45   4549   5249 --:--:-- --:--:-- --:--:-- 10500User testi1 authenticated successfully.
 
 
         // Ja sitten se funktio, joka tekee sen JWT generation
