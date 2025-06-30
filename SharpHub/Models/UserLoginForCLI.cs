@@ -4,6 +4,7 @@
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public string RepositoryName { get; set; } = string.Empty;
         public UserLoginForCLI(string username, string password)
         {
             Username = username;

@@ -40,6 +40,7 @@ namespace SharpHub.Controllers
                 }
                 if (vastaavuus != null)
                 {
+                    // Tähän tarkistus onko se repo tämän käyttäjän.
                     monkey = $"User {vastaavuus.Username} authenticated successfully.";
                 }
                 else { monkey = "Joku ei toiminut"; }
