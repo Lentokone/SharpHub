@@ -59,15 +59,6 @@ namespace SharpHub.Controllers
         // Eli tuo saisi palauttaa sen JWT tokenin ja SSH keyn.
 
 
-        // Nonni. 27/06/2025 2:05 Tuo nyt jotenkin voi vastaanottaa User creds
-        //
-        // Tällä komennolla
-        // $ curl -H "Content-Type: application/json" -d '{ "Username" : "testi1", "Password" : "123" }' https://localhost:7173/api/cli/auth/consolelogin
-        //% Total    % Received % Xferd Average Speed Time    Time Time  Current
-        //                                Dload  Upload Total   Spent Left  Speed
-        //100    84    0    39  100    45   4549   5249 --:--:-- --:--:-- --:--:-- 10500User testi1 authenticated successfully.
-
-
         // Ja sitten se funktio, joka tekee sen JWT generation
         // Funktio joka tekee sen SSH key generoinnin per user per repo.
         // Funktio joka tuhoaa sen SSH keyn.
