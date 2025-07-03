@@ -45,6 +45,9 @@ namespace SharpHub.Controllers
                 }
                 else { monkey = "Joku ei toiminut"; }
                 //monkey = clilogin.Username.ToString();
+
+                // Note to self:
+                // Tämä tulee palauttamaan JWT token, sille refresh token, ja SSH keyn.
                 return Ok(monkey);
             }
             else
@@ -57,8 +60,17 @@ namespace SharpHub.Controllers
 
         //28/06/2025
         // Eli tuo saisi palauttaa sen JWT tokenin ja SSH keyn.
+        public static string GenerateJWTToken(User user)
+        {
+            // Tässä olisi se JWT tokenin generointi.
+            // Tämä on vain esimerkki, oikeasti pitäisi käyttää JWT kirjastoa.
+            return $"JWT-{user.Username}-{DateTime.UtcNow.Ticks}";
+        }
 
+        public static void DestroySSHKey()
+        {
 
+        }
         // Ja sitten se funktio, joka tekee sen JWT generation
         // Funktio joka tekee sen SSH key generoinnin per user per repo.
         // Funktio joka tuhoaa sen SSH keyn.
@@ -67,5 +79,10 @@ namespace SharpHub.Controllers
 
         // Myös tarvitsee sen funktion joka vastaanottaa jonkun post messagen---
         // kun käyttäjä push:aa niin se logaa tietokantaan jtn vastaavaa, "user: Uid, repo: RepoName, action: push, commit: hash, time: 2023-10-01T12:00:00Z"
+        [HttpPost("LogToDB")]
+        public IActionResult LogToDB([FromBody] string monkey)
+        {
+            return Ok(monkey == null ? "monkey" : monkey);
+        }
     }
 }
