@@ -55,6 +55,11 @@ namespace SharpHub.Controllers
                 return Ok(monkey);
             }
         }
+
+        /// Tosijaan kommenttia taas tänne::::
+        //! 04/07/2025
+        // Olisi kiva logata tietokantaan, Failed login, Commit pushed, Repo created / deleted, Unhandled error logged.
+
         //! 30/06/2025
         // Eli ideana olisi sitten myös olla Refresh token, jota käytetään, jos JWT token on vanhentunut.
 
