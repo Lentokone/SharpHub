@@ -60,22 +60,19 @@ namespace SharpHub.Controllers
         //! 04/07/2025
         // Olisi kiva logata tietokantaan, Failed login, Commit pushed, Repo created / deleted, Unhandled error logged.
 
-        //! 30/06/2025
-        // Eli ideana olisi sitten myös olla Refresh token, jota käytetään, jos JWT token on vanhentunut.
-
-        //28/06/2025
-        // Eli tuo saisi palauttaa sen JWT tokenin ja SSH keyn.
-        public static string GenerateJWTToken(User user)
-        {
-            // Tässä olisi se JWT tokenin generointi.
-            // Tämä on vain esimerkki, oikeasti pitäisi käyttää JWT kirjastoa.
-            return $"JWT-{user.Username}-{DateTime.UtcNow.Ticks}";
-        }
+                
+        //[HttpPost("testing")]
+        //public IActionResult JwtGenerationTest()
+        //{
+        //    var token = _jwtService.GenerateJWTToken(new User { Username = "testuser" });
+        //    return Ok();
+        //}
 
         public static void DestroySSHKey()
         {
 
         }
+
         // Ja sitten se funktio, joka tekee sen JWT generation
         // Funktio joka tekee sen SSH key generoinnin per user per repo.
         // Funktio joka tuhoaa sen SSH keyn.
