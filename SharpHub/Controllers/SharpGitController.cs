@@ -10,6 +10,13 @@ namespace SharpHub.Controllers
     [Route("api/cli/auth")]
     public class SharpGitController : Controller
     {
+        private readonly JwtTokenService _jwtService;
+
+        public SharpGitController(JwtTokenService jwtService)
+        {
+            _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
+        }
+
         //   http://localhost:5227/api/cli/auth/consolelogin
 
         // Tässä parempi komento testata
@@ -42,12 +49,15 @@ namespace SharpHub.Controllers
                 {
                     // Tähän tarkistus onko se repo tämän käyttäjän.
                     monkey = $"User {vastaavuus.Username} authenticated successfully.";
+                    var token = _jwtService.GenerateJWTToken(vastaavuus.Username, cliLoginContent.RepositoryName, clilogin.Password);
+
                 }
                 else { monkey = "Joku ei toiminut"; }
                 //monkey = clilogin.Username.ToString();
 
                 // Note to self:
                 // Tämä tulee palauttamaan JWT token, sille refresh token, ja SSH keyn.
+                
                 return Ok(monkey);
             }
             else
@@ -56,11 +66,18 @@ namespace SharpHub.Controllers
             }
         }
 
+        // Placeholder funktio, joka logaa refresh ja JWT, tietokantaan.
+        public static void LogJWTRefresh(string username, string jwtToken, string refreshToken)
+        {
+            // Tähän loggaus tietokantaan.
+            // MongoManipulator.Save(new JWTLog { Username = username, JwtToken = jwtToken, RefreshToken = refreshToken });
+        }
+
         /// Tosijaan kommenttia taas tänne::::
         //! 04/07/2025
         // Olisi kiva logata tietokantaan, Failed login, Commit pushed, Repo created / deleted, Unhandled error logged.
 
-                
+
         //[HttpPost("testing")]
         //public IActionResult JwtGenerationTest()
         //{
