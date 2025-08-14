@@ -73,31 +73,11 @@ namespace SharpHub.Controllers
             // MongoManipulator.Save(new JWTLog { Username = username, JwtToken = jwtToken, RefreshToken = refreshToken });
         }
 
-        /// Tosijaan kommenttia taas tänne::::
-        //! 04/07/2025
-        // Olisi kiva logata tietokantaan, Failed login, Commit pushed, Repo created / deleted, Unhandled error logged.
-
-
-        //[HttpPost("testing")]
-        //public IActionResult JwtGenerationTest()
-        //{
-        //    var token = _jwtService.GenerateJWTToken(new User { Username = "testuser" });
-        //    return Ok();
-        //}
-
         public static void DestroySSHKey()
         {
 
         }
-
-        // Ja sitten se funktio, joka tekee sen JWT generation
-        // Funktio joka tekee sen SSH key generoinnin per user per repo.
-        // Funktio joka tuhoaa sen SSH keyn.
-
-        // Ja funktio joka palauttaa sen JWT tokenin ja SSH keyn.
-
-        // Myös tarvitsee sen funktion joka vastaanottaa jonkun post messagen---
-        // kun käyttäjä push:aa niin se logaa tietokantaan jtn vastaavaa, "user: Uid, repo: RepoName, action: push, commit: hash, time: 2023-10-01T12:00:00Z"
+        
         [HttpPost("LogToDB")]
         public IActionResult LogToDB([FromBody] string monkey)
         {
