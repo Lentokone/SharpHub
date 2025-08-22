@@ -21,7 +21,7 @@
             {
             RepositoryName = repositoryName;
             Owner = owner;
-            Description = description;
+            Description = description ?? "";
             RepositoryPath = repositoryPath;
             CreatedAt = DateTime.UtcNow; // Set the creation time to now
         }

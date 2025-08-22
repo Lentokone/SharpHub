@@ -76,6 +76,11 @@ namespace SharpHub.Models.Services
         {
             var MongoTable = GetDB().GetCollection<T>(typeof(T).Name);
 
+            if(record._id != ObjectId.Empty)
+            {
+                var filterById = Builders<T>.Filter.Eq("_id", record._id);
+                return MongoTable.Find(filterById).FirstOrDefault() ?? throw new ArgumentException($"Ei löytynyt dokumenttia ID:llä {record._id} luokasta {typeof(T).Name}.");
+            }
             // Etsitään ensimmäinen ei-null-arvoinen ominaisuus dynaamisesti
             var property = typeof(T).GetProperties()
                 .FirstOrDefault(p => p.GetValue(record) != null);

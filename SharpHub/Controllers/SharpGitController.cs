@@ -78,6 +78,7 @@ namespace SharpHub.Controllers
 
         }
         
+        // Mikä tämä on?
         [HttpPost("LogToDB")]
         public IActionResult LogToDB([FromBody] string monkey)
         {
