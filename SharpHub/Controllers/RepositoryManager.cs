@@ -21,6 +21,24 @@ namespace SharpHub.Controllers
             return wantedRepo;
         }
 
+        // Tulevaisuuden arvoikas Olli.
+        // Muista tarkistaa mitä kirjoitat kun olet humalassa.
+        // Ettet unohda mitään tyhmää.
+        public List<T> GetListOfRepositories<T>(string owner)
+        {
+            // Tässä haetaan kaikki repositoriot
+            // MongoManipulator.SearchAll<Repository>();
+
+            // Tähän vaan joku super solid idea siitä että x henkilön repositoriot palautetaan.
+            // Onnea matkaan tulevan henkilö joka koskee tähän.
+            
+
+
+            // Onnea matkaan minä
+            var list = new List<T>();
+            return list;
+        }
+
         public void deleteRepository(Repository repository)
         {
             repository.IsDeleted = true;
