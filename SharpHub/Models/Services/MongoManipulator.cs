@@ -104,5 +104,12 @@ namespace SharpHub.Models.Services
             // Palautetaan ensimmäinen löydetty dokumentti tai null, jos ei löydy
             return MongoTable.Find(filter).FirstOrDefault();
         }
+
+        public static List<Repository> SearchAllRepositories(string userName)
+        {
+            var MongoTable = GetDB().GetCollection<Repository>("Repository");
+            var filter = Builders<Repository>.Filter.Eq("Owner", userName);
+            return MongoTable.Find(filter).ToList();
+        }
     }
 }

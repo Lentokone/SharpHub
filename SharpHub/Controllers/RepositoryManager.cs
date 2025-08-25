@@ -24,22 +24,26 @@ namespace SharpHub.Controllers
         // Tulevaisuuden arvoikas Olli.
         // Muista tarkistaa mitä kirjoitat kun olet humalassa.
         // Ettet unohda mitään tyhmää.
-        public List<T> GetListOfRepositories<T>(string owner)
+        public List<Repository> GetListOfRepositories(string owner)
         {
-            // Tässä haetaan kaikki repositoriot
-            // MongoManipulator.SearchAll<Repository>();
+            if (string.IsNullOrEmpty(owner))
+            {
+                throw new ArgumentException("Omistaja ei voi olla null tai tyhjä.");
+            }
+            try
 
-            // Tähän vaan joku super solid idea siitä että x henkilön repositoriot palautetaan.
-            // Onnea matkaan tulevan henkilö joka koskee tähän.
-            
-
-
-            // Onnea matkaan minä
-            var list = new List<T>();
-            return list;
+            {
+                return MongoManipulator.SearchAll(owner);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Virhe haettaessa repositorioita omistajalla {owner}: {ex.Message}");
+                
+                return [];
+            }
         }
 
-        public void deleteRepository(Repository repository)
+        public void DeleteRepository(Repository repository)
         {
             repository.IsDeleted = true;
             repository.DeletedAt = DateTime.UtcNow;
