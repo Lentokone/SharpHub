@@ -6,6 +6,7 @@ namespace SharpHub.Controllers
 {
     public class RepositoryManager : Controller
     {
+        private const string REPO_BASE_PATH = "/var/sharphub/repos";
         public IActionResult Index()
         {
             return View();
@@ -15,6 +16,33 @@ namespace SharpHub.Controllers
         // Tänne siis tulee kaikki repositoryihin liittyvät toiminnot.
 
         // Eli luodaan uusi repo, haetaan repo, poistetaan repo, jne.
+
+        // Ei valmista vielä.
+        public Repository CreateRepository(string repositoryName, string owner, string description)
+        {
+            if (string.IsNullOrEmpty(repositoryName) || string.IsNullOrEmpty(owner))
+            {
+                throw new ArgumentException("Repository name, owner, and path cannot be null or empty.");
+            }
+
+            // This is for when we will have a viewmodel for creating repos.
+            var RepoInput = new CreateRepoInput(repositoryName, owner, description);
+            // Nonni. Pikkusen infoa.
+            // RepositoryPath on polku palvelimella, jossa repo sijaitsee.
+            // Ihan hyvä syöttö koopilot
+            // Jatketaan
+            // Eli repo path on polkua esim /var/repos/username/reponame.git
+            // Eli ei anneta käyttäjän itse määritellä sitä.
+            // Vaan tehdään se annetulla reponame ja ownerilla.
+            // Esim. /var/repos/owner/repositoryName.git
+
+            var repositoryPath = $"{REPO_BASE_PATH}/{RepoInput.Owner}/{RepoInput.RepositoryName}.git";
+
+            var newRepo = new Repository(RepoInput.RepositoryName, RepoInput.Owner, RepoInput.Description, repositoryPath);
+            MongoManipulator.Save(newRepo);
+            return newRepo;
+        }
+
         public Repository GetRepository(Repository wantedRepo)
         {
             wantedRepo = MongoManipulator.Search(wantedRepo);
@@ -33,7 +61,7 @@ namespace SharpHub.Controllers
             try
 
             {
-                return MongoManipulator.SearchAll(owner);
+                return MongoManipulator.SearchAllRepositories(owner);
             }
             catch (Exception ex)
             {
