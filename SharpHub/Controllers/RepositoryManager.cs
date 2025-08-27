@@ -19,7 +19,7 @@ namespace SharpHub.Controllers
 
         // Ei valmista vielä.
         [HttpPost]
-        public IActionResult CreateRepository(CreateRepositoryViewModel vm)
+        public IActionResult CreateRepositoryMVC(CreateRepositoryViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -29,14 +29,20 @@ namespace SharpHub.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.RepositoryName) || string.IsNullOrWhiteSpace(owner))
                 return BadRequest("Required values missing.");
+            var repository = CreateRepositoryCore(vm.RepositoryName, owner, vm.Description);
+            return Ok(repository);
+        }
 
-            var RepoInput = new CreateRepoInput(vm.RepositoryName, owner, vm.Description);
-
-            var repositoryPath = $"{REPO_BASE_PATH}/{RepoInput.Owner}/{RepoInput.RepositoryName}.git";
-
-            var newRepo = new Repository(RepoInput.RepositoryName, RepoInput.Owner, RepoInput.Description, repositoryPath);
+        public Repository CreateRepositoryCore(string repositoryName, string owner, string description)
+        {
+            if (string.IsNullOrWhiteSpace(repositoryName) || string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentException("Invalid repository input.");
+            }
+            var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
+            var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
             MongoManipulator.Save(newRepo);
-            return Ok(newRepo);
+            return newRepo;
         }
 
         public Repository GetRepository(Repository wantedRepo)
