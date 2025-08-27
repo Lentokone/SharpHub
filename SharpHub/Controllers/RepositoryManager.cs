@@ -18,29 +18,25 @@ namespace SharpHub.Controllers
         // Eli luodaan uusi repo, haetaan repo, poistetaan repo, jne.
 
         // Ei valmista vielä.
-        public Repository CreateRepository(string repositoryName, string owner, string description)
+        [HttpPost]
+        public IActionResult CreateRepository(CreateRepositoryViewModel vm)
         {
-            if (string.IsNullOrEmpty(repositoryName) || string.IsNullOrEmpty(owner))
+            if (!ModelState.IsValid)
             {
-                throw new ArgumentException("Repository name, owner, and path cannot be null or empty.");
+                return BadRequest(ModelState);
             }
+            var owner = User.Identity?.Name;
 
-            // This is for when we will have a viewmodel for creating repos.
-            var RepoInput = new CreateRepoInput(repositoryName, owner, description);
-            // Nonni. Pikkusen infoa.
-            // RepositoryPath on polku palvelimella, jossa repo sijaitsee.
-            // Ihan hyvä syöttö koopilot
-            // Jatketaan
-            // Eli repo path on polkua esim /var/repos/username/reponame.git
-            // Eli ei anneta käyttäjän itse määritellä sitä.
-            // Vaan tehdään se annetulla reponame ja ownerilla.
-            // Esim. /var/repos/owner/repositoryName.git
+            if (string.IsNullOrWhiteSpace(vm.RepositoryName) || string.IsNullOrWhiteSpace(owner))
+                return BadRequest("Required values missing.");
+
+            var RepoInput = new CreateRepoInput(vm.RepositoryName, owner, vm.Description);
 
             var repositoryPath = $"{REPO_BASE_PATH}/{RepoInput.Owner}/{RepoInput.RepositoryName}.git";
 
             var newRepo = new Repository(RepoInput.RepositoryName, RepoInput.Owner, RepoInput.Description, repositoryPath);
             MongoManipulator.Save(newRepo);
-            return newRepo;
+            return Ok(newRepo);
         }
 
         public Repository GetRepository(Repository wantedRepo)
@@ -58,15 +54,14 @@ namespace SharpHub.Controllers
             {
                 throw new ArgumentException("Omistaja ei voi olla null tai tyhjä.");
             }
+            
             try
-
             {
                 return MongoManipulator.SearchAllRepositories(owner);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Virhe haettaessa repositorioita omistajalla {owner}: {ex.Message}");
-                
                 return [];
             }
         }

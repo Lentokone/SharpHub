@@ -1,9 +1,16 @@
 ﻿namespace SharpHub.Models
 {
-    public class CreateRepoInput(string repositoryName, string owner, string description)
+    public class CreateRepoInput
     {
-        public string RepositoryName { get; set; } = repositoryName;
-        public string Owner { get; set; } = owner;
-        public string Description { get; set; } = description ?? "";
+        public string RepositoryName { get; set; } = "";
+        public string Owner { get; set; } = "";
+        public string Description { get; set; } = "";
+
+        public CreateRepoInput(string repositoryName, string owner, string description)
+        {
+            RepositoryName = repositoryName;
+            Owner = owner;
+            Description = description;
+        }
     }
 }
