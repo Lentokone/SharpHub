@@ -39,12 +39,22 @@ namespace SharpHub.Controllers
             {
                 throw new ArgumentException("Invalid repository input.");
             }
-            var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
+            // var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
+            // var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, $"{repositoryName}.git");
+            var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, repositoryName);
+
+            // Tänne viellä kansioiden luonti
+            // Ja niiden tarkistus jos onkin jostain syystä jo olemassa
+
+
+            string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
             var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
             MongoManipulator.Save(newRepo);
             return newRepo;
         }
 
+        // Tämä ei tule toimimaan
+        // Varmaan parempi hakea repo nimellä
         public Repository GetRepository(Repository wantedRepo)
         {
             wantedRepo = MongoManipulator.Search(wantedRepo);

@@ -35,13 +35,11 @@ namespace SharpHub.Controllers
                 }
                 RepositoryManager repoManager = new();
                 repoManager.CreateRepositoryCore(cliRepoCreation.RepositoryName, cliRepoCreation.Owner, cliRepoCreation.Description);
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
             return Ok("Creation successful");
         }
 
@@ -86,7 +84,7 @@ namespace SharpHub.Controllers
 
                 // Note to self:
                 // Tämä tulee palauttamaan JWT token, sille refresh token, ja SSH keyn.
-                
+
                 return Ok(monkey);
             }
             else
@@ -106,7 +104,7 @@ namespace SharpHub.Controllers
         {
 
         }
-        
+
         // Mikä tämä on?
         [HttpPost("LogToDB")]
         public IActionResult LogToDB([FromBody] string monkey)
