@@ -41,12 +41,18 @@ namespace SharpHub.Controllers
             }
             // var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
             // var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, $"{repositoryName}.git");
-            var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, repositoryName);
+            var ownerPath = Path.Combine(REPO_BASE_PATH, owner);
+            var repositoryPath = Path.Combine(ownerPath, $"{repositoryName}.git");
 
-            // Tänne viellä kansioiden luonti
-            // Ja niiden tarkistus jos onkin jostain syystä jo olemassa
-
-
+            if (!Directory.Exists(ownerPath))
+            {
+                Directory.CreateDirectory(ownerPath);
+            }
+            
+            if (Directory.Exists(repositoryPath))
+            {
+                throw new InvalidOperationException("Repository path already exists.");
+            }
             string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
             var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
             MongoManipulator.Save(newRepo);
