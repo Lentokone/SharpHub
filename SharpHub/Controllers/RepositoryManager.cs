@@ -88,6 +88,17 @@ namespace SharpHub.Controllers
             }
         }
 
+        public IActionResult ChangeRepoDescription(Repository wantedRepo, string newDesc)
+        {
+            if (string.IsNullOrWhiteSpace(newDesc) || wantedRepo == null)
+            {
+                return BadRequest("Invalid input.");
+            }
+            wantedRepo.Description = newDesc;
+            MongoManipulator.Save(wantedRepo);
+            return Ok();
+        }
+
         public void DeleteRepository(Repository repository)
         {
             repository.IsDeleted = true;
