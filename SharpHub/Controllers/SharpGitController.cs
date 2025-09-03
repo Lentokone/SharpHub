@@ -33,7 +33,7 @@ namespace SharpHub.Controllers
                 {
                     return BadRequest("Owner cannot be empty.");
                 }
-                RepositoryManager repoManager = new();
+                RepositoryManagerController repoManager = new();
                 repoManager.CreateRepositoryCore(cliRepoCreation.RepositoryName, cliRepoCreation.Owner, cliRepoCreation.Description);
             }
             catch (Exception ex)
