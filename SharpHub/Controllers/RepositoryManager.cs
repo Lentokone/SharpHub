@@ -41,6 +41,12 @@ namespace SharpHub.Controllers
             }
             // var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
             // var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, $"{repositoryName}.git");
+
+            if (GetListOfRepositoryNames(owner).Contains(repositoryName))
+                {
+                throw new InvalidOperationException("Repository name already exists for this owner.");
+            }
+
             var ownerPath = Path.Combine(REPO_BASE_PATH, owner);
             var repositoryPath = Path.Combine(ownerPath, $"{repositoryName}.git");
 
@@ -59,6 +65,12 @@ namespace SharpHub.Controllers
             return newRepo;
         }
 
+
+        /*
+         * -----------------
+         * TAG OF REDUNDANCY
+         * -----------------
+         */
         // Tämä ei tule toimimaan
         // Varmaan parempi hakea repo nimellä
         public Repository GetRepository(Repository wantedRepo)
@@ -67,6 +79,12 @@ namespace SharpHub.Controllers
             return wantedRepo;
         }
 
+
+        /*
+         * -----------------
+         * TAG OF REDUNDANCY
+         * -----------------
+         */
         // Tulevaisuuden arvoikas Olli.
         // Muista tarkistaa mitä kirjoitat kun olet humalassa.
         // Ettet unohda mitään tyhmää.
@@ -87,6 +105,25 @@ namespace SharpHub.Controllers
                 return [];
             }
         }
+        /*
+         * -----------------
+         * TAG OF REDUNDANCY
+         * -----------------
+         */
+
+        /*
+         * ------------
+         * TAG OF MAYBE
+         * ------------
+         */
+        public List<string> GetListOfRepositoryNames(string owner)
+        {
+            var repos = GetListOfRepositories(owner);
+            return [.. repos.Select(r => r.RepositoryName)];
+        }
+        
+        
+
 
         public IActionResult ChangeRepoDescription(Repository wantedRepo, string newDesc)
         {

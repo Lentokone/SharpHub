@@ -105,6 +105,25 @@ namespace SharpHub.Models.Services
             return MongoTable.Find(filter).FirstOrDefault();
         }
 
+        public static bool RepositoryExists(string owner, string repoName)
+        {
+            var filter = Builders<Repository>.Filter.And(
+                Builders<Repository>.Filter.Eq(r => r.Owner, owner),
+                Builders<Repository>.Filter.Eq(r => r.RepositoryName, repoName)
+            );
+            var MongoTable = GetDB().GetCollection<Repository>("Repository");
+            return MongoTable.Find(filter).Any();
+        }
+
+        public static List<string> SearchAllRepositoryNames(string userName)
+        {
+            var MongoTable = GetDB().GetCollection<Repository>("Repository");
+            var filter = Builders<Repository>.Filter.Eq(r => r.Owner, userName);
+            var repoNames = MongoTable.Find(filter).Project(r => r.RepositoryName).ToList();
+
+            return repoNames;
+        }
+
         public static List<Repository> SearchAllRepositories(string userName)
         {
             var MongoTable = GetDB().GetCollection<Repository>("Repository");
