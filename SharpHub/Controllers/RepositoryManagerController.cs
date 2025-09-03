@@ -4,7 +4,7 @@ using SharpHub.Models.Services;
 
 namespace SharpHub.Controllers
 {
-    public class RepositoryManager : Controller
+    public class RepositoryManagerController : Controller
     {
         private const string REPO_BASE_PATH = "/var/sharphub/repos";
         public IActionResult Index()
@@ -42,7 +42,7 @@ namespace SharpHub.Controllers
             // var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
             // var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, $"{repositoryName}.git");
 
-            if (GetListOfRepositoryNames(owner).Contains(repositoryName))
+            if (MongoManipulator.RepositoryExists(owner, repositoryName))
                 {
                 throw new InvalidOperationException("Repository name already exists for this owner.");
             }
