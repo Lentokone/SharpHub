@@ -9,7 +9,17 @@ namespace SharpHub.Controllers
         private const string REPO_BASE_PATH = "/var/sharphub/repos";
         public IActionResult Index()
         {
-            return View();
+            var owner = User.Identity?.Name;
+            var repositories = GetListOfRepositories(owner ?? "");
+
+            var bob = new List<Repository>();
+            for (int i = 0; i < 5; i++)
+            {
+                bob.Add(new Repository($"Repo{i}", owner ?? "unknown", $"Description for Repo{i}", $"/var/sharphub/repos/{owner}/Repo{i}.git"));
+            }
+            //bob.Add();
+            return View(bob);
+            //return View(repositories);
         }
 
         // Nonni
