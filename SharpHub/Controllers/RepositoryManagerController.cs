@@ -20,7 +20,10 @@ namespace SharpHub.Controllers
                 bob.Add(new Repository($"Repo{i}", owner ?? "unknown", $"Description for Repo{i}", $"/var/sharphub/repos/{owner}/Repo{i}.git"));
             }
             //bob.Add();
-            return View(bob);
+
+            // IMPORTANT
+            //return View(bob);
+            return View(new REPOMANAGERtestTEST { Repositories = repositories, NewRepository = new Repository("Testt", "ttest", "", "jep") });
             //return View(repositories);
         }
 
@@ -30,6 +33,10 @@ namespace SharpHub.Controllers
         // Eli luodaan uusi repo, haetaan repo, poistetaan repo, jne.
 
         // Ei valmista vielä.
+
+        // 06.09.2025
+        // Ei vieläkään valmista.
+
         [HttpPost]
         public IActionResult CreateRepositoryMVC(CreateRepositoryViewModel vm)
         {

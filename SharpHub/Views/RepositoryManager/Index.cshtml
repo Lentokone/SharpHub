@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Repository>
+﻿@* @model IEnumerable<Repository> *@
+@model REPOMANAGERtestTEST
 
 @{
     ViewData["Title"] = "Home Page";
@@ -16,9 +17,11 @@
 
 <div>
     <ul>
-        @foreach (var repo in Model)
+        @foreach (var repo in Model.Repositories)
         {
             <li>@repo.RepositoryName - @repo.Description</li>
         }
     </ul>
 </div>
+
+<partial name="_CreateRepo" model="Model.NewRepository"/>
