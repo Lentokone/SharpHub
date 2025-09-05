@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
 using SharpHub.Models.Services;
 
 namespace SharpHub.Controllers
 {
+    [Authorize]
     public class RepositoryManagerController : Controller
     {
         private const string REPO_BASE_PATH = "/var/sharphub/repos";

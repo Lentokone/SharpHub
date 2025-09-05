@@ -11,10 +11,15 @@ builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";
+        options.LoginPath = "/Home";
+        options.Events.OnRedirectToLogin = context =>
+        {
+            context.Response.Redirect("/Home");
+            return Task.CompletedTask;
+        };
         options.LogoutPath = "/Home/Index";
         options.ExpireTimeSpan = TimeSpan.FromDays(5);
-        options.Cookie.Name = "Super_non_obvious_cookiename_PFTracker";
+        options.Cookie.Name = "Super_non_obvious_cookiename_SharpHub";
         options.AccessDeniedPath = "/Home/Index";
     });
 

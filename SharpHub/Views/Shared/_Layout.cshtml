@@ -28,6 +28,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="RepositoryManager" asp-action="Index">Repositories</a>
+                        }
                     </ul>
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
@@ -44,7 +48,7 @@
                         if (!(currentController == "Account"))
                         {
                             <form asp-controller="Account" asp-action="Index" method="post">
-                                <button class="btn btn-primary" type="submit">Login</button>
+                                <button class="btn btn-primary" type="submit">Login / Register</button>
                             </form>
                         }
                     }
