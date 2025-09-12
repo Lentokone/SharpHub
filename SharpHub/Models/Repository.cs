@@ -8,6 +8,7 @@
         public string RepositoryPath { get; set; } // Path to the repository on the server
         public bool IsDeleted { get; set; } = false; // Default is not deleted
 
+        public DateTime EditedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 

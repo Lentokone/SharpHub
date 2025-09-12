@@ -49,7 +49,8 @@ namespace SharpHub.Controllers
             if (string.IsNullOrWhiteSpace(vm.RepositoryName) || string.IsNullOrWhiteSpace(owner))
                 return BadRequest("Required values missing.");
             var repository = CreateRepositoryCore(vm.RepositoryName, owner, vm.Description);
-            return Ok(repository);
+            //return Ok(repository);
+            return RedirectToAction("Index");
         }
 
         public Repository CreateRepositoryCore(string repositoryName, string owner, string description)
