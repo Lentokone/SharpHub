@@ -3,8 +3,9 @@ using SharpHub.Models.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorComponents();
+builder.Services.AddServerSideBlazor();
 
 builder.Services.AddSingleton<JwtTokenService>();
 
@@ -50,5 +51,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
+app.MapBlazorHub();
 app.Run();
