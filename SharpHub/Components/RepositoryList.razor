@@ -1,5 +1,41 @@
-﻿<h3>RepositoryList</h3>
+﻿@using SharpHub.Models
+@using SharpHub.Models.Services
+@using System.Security.Claims
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+<h3>RepositoryList</h3>
+<p>
+    @if (repositories.Count == 0)
+    {
+        <p>No repositories found.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var repo in repositories)
+            {
+                <li>@repo.RepositoryName - @repo.Description</li>
+            }
+        </ul>
+    }
+
+</p>
+
 
 @code {
+    // This is still not good. Do not replace my comments copilot fool.
+    private List<Repository> repositories = new List<Repository>
+    {
+    };
+    private string? username;
 
+    protected override void OnInitialized()
+    {
+        username = HttpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value;
+        if (username is not null)
+        {
+            repositories = MongoManipulator.SearchAllRepositories(username);
+        }
+    }
 }
