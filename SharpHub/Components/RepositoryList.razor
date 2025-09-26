@@ -4,26 +4,15 @@
 
 <h3>RepositoryList</h3>
 <p>@Model.UserName</p>
-@if (Model.Repositories.Count == 0)
+
+@if (!Model.Repositories.Any())
 {
     <p>No repositories found.</p>
-    <p>SAATANA</p>
-    <p>SAATANA</p>
-    <p>SAATANA</p>
-}
-@if (repositories.Count == 0)
-{
-    <p>No repositories found.</p>
-    @foreach (var repo in repositories)
-    {
-        <li>@repo.RepositoryName - @repo.Description</li>
-        <li> Updated on @repo.EditedAt</li>
-    }
 }
 else
 {
     <ul>
-        @foreach (var repo in repositories)
+        @foreach (var repo in Model.Repositories)
         {
             <li>@repo.RepositoryName - @repo.Description</li>
             <li> Updated on @repo.EditedAt</li>

@@ -23,7 +23,6 @@ namespace SharpHub.Controllers
                 UserName = owner ?? "Unknown",
                 Repositories = repos ?? new List<Repository>()
             };
-
             return View(vm);
         }
 
