@@ -2,40 +2,49 @@
 @using SharpHub.Models.Services
 @using System.Security.Claims
 
-@inject IHttpContextAccessor HttpContextAccessor
-
 <h3>RepositoryList</h3>
-<p>
-    @if (repositories.Count == 0)
+<p>@Model.UserName</p>
+@if (Model.Repositories.Count == 0)
+{
+    <p>No repositories found.</p>
+    <p>SAATANA</p>
+    <p>SAATANA</p>
+    <p>SAATANA</p>
+}
+@if (repositories.Count == 0)
+{
+    <p>No repositories found.</p>
+    @foreach (var repo in repositories)
     {
-        <p>No repositories found.</p>
+        <li>@repo.RepositoryName - @repo.Description</li>
+        <li> Updated on @repo.EditedAt</li>
     }
-    else
-    {
-        <ul>
-            @foreach (var repo in repositories)
-            {
-                <li>@repo.RepositoryName - @repo.Description</li>
-            }
-        </ul>
-    }
+}
+else
+{
+    <ul>
+        @foreach (var repo in repositories)
+        {
+            <li>@repo.RepositoryName - @repo.Description</li>
+            <li> Updated on @repo.EditedAt</li>
+        }
+    </ul>
+}
 
-</p>
+
 
 
 @code {
+    [Parameter]
+    public RepositoryListViewModel Model { get; set; }
     // This is still not good. Do not replace my comments copilot fool.
-    private List<Repository> repositories = new List<Repository>
-    {
-    };
+    // private List<Repository> repositories = Model.Repositories;
+    private List<Repository> repositories = new();
     private string? username;
 
-    protected override void OnInitialized()
-    {
-        username = HttpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value;
-        if (username is not null)
-        {
-            repositories = MongoManipulator.SearchAllRepositories(username);
-        }
-    }
+    // This will be given a viewmodel that has the repositories fetched by the thingamajig that redirects to the component.
+    // Will also have the username in the viewmodel.
+    // For fetching after editing and such...
 }
+
+@* Good luck, Me! *@

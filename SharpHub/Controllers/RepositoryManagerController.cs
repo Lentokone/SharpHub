@@ -12,30 +12,20 @@ namespace SharpHub.Controllers
         public IActionResult Index()
         {
             var owner = User.Identity?.Name;
-            var repositories = GetListOfRepositories(owner ?? "");
-
-            var bob = new List<Repository>();
-            for (int i = 0; i < 5; i++)
+            List<Repository>? repos = null;
+            if (owner != null)
             {
-                bob.Add(new Repository($"Repo{i}", owner ?? "unknown", $"Description for Repo{i}", $"/var/sharphub/repos/{owner}/Repo{i}.git"));
+                repos = GetListOfRepositories(owner);
             }
-            //bob.Add();
 
-            // IMPORTANT
-            //return View(bob);
-            return View(new REPOMANAGERtestTEST { Repositories = repositories, NewRepository = new Repository("Testt", "ttest", "", "jep") });
-            //return View(repositories);
+            var vm = new RepositoryListViewModel
+            {
+                UserName = owner ?? "Unknown",
+                Repositories = repos ?? new List<Repository>()
+            };
+
+            return View(vm);
         }
-
-        // Nonni
-        // Tänne siis tulee kaikki repositoryihin liittyvät toiminnot.
-
-        // Eli luodaan uusi repo, haetaan repo, poistetaan repo, jne.
-
-        // Ei valmista vielä.
-
-        // 06.09.2025
-        // Ei vieläkään valmista.
 
         [HttpPost]
         public IActionResult CreateRepositoryMVC(CreateRepositoryViewModel vm)

@@ -1,5 +1,6 @@
-﻿@* @model IEnumerable<Repository> *@
-@model REPOMANAGERtestTEST
+﻿@using SharpHub.Components
+@* @model IEnumerable<Repository> *@
+@model RepositoryListViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -15,13 +16,15 @@
     <h2 class="display-6">Tarvii ne partial viewit, repo creation, desc change.</h2>
 </div>
 
-<div>
+<component type="typeof(RepositoryList)" render-mode="Server" param-Model="Model" />
+
+@* <div>
     <ul>
         @foreach (var repo in Model.Repositories)
         {
             <li>@repo.RepositoryName - @repo.Description</li>
         }
     </ul>
-</div>
+</div> *@
 
-<partial name="_CreateRepo" model="Model.NewRepository"/>
+@* <partial name="_CreateRepo" model="Model.NewRepository"/> *@
