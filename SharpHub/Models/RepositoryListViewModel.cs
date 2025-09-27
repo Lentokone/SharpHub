@@ -2,7 +2,7 @@
 {
     public class RepositoryListViewModel
     {
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public List<Repository> Repositories { get; set; }
     }
 }
