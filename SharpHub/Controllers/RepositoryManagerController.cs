@@ -26,6 +26,13 @@ namespace SharpHub.Controllers
             return View(vm);
         }
 
+        public IActionResult _DeleteRepo()
+        {
+            // Tälle annetaan viewmodel jossa on tietty repository
+            // On käytössä vaan RepositoryDetails komponentissa.
+            return PartialView();
+        }
+
         [HttpPost]
         public IActionResult CreateRepositoryMVC(CreateRepositoryViewModel vm)
         {
