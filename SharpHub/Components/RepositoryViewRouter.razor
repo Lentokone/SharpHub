@@ -1,0 +1,16 @@
+@using SharpHub.Models
+
+@if (Model.IsRepoDetails)
+{
+    <RepositoryDetails Model="Model.RepositoryListViewModel" />
+}
+else
+{
+    <RepositoryList Model="Model.RepositoryListViewModel"/>
+}
+
+@code {
+    [Parameter] public RepositoryManagerViewModel Model { get; set; } = new RepositoryManagerViewModel();
+
+
+}

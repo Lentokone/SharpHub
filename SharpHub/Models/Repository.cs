@@ -24,6 +24,7 @@
             Owner = owner;
             Description = description ?? "";
             RepositoryPath = repositoryPath;
+            EditedAt = DateTime.UtcNow;
             CreatedAt = DateTime.UtcNow; // Set the creation time to now
         }
     }
