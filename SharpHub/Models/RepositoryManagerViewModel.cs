@@ -6,6 +6,7 @@ namespace SharpHub.Models
 
         public bool IsRepoDetails { get; set; } = false;
         
+        public RepositoryDetailsViewModel RepositoryDetailsViewModel { get; set; }
         public RepositoryListViewModel RepositoryListViewModel { get; set; }
     }
 }

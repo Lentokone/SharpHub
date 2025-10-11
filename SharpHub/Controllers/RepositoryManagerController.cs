@@ -90,6 +90,7 @@ namespace SharpHub.Controllers
             var vm = new RepositoryManagerViewModel
             {
                 Username = owner ?? "Unknown",
+                RepositoryDetailsViewModel = new RepositoryDetailsViewModel{Username = owner, RepositoryName = null},
                 RepositoryListViewModel = new RepositoryListViewModel{Repositories = repositories}
             };
             
