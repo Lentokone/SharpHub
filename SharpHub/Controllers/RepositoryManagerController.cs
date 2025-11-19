@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LibGit2Sharp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
 using SharpHub.Models.Services;
+using Repository = SharpHub.Models.Repository;
 
 namespace SharpHub.Controllers
 {
     [Authorize]
+    [Route("RepositoryManager")]
     public class RepositoryManagerController : Controller
     {
         private const string REPO_BASE_PATH = "/var/sharphub/repos";
+        [HttpGet("")]
         public IActionResult Index()
         {
             var owner = User.Identity?.Name;
@@ -104,6 +108,25 @@ namespace SharpHub.Controllers
             return View(vm);
         }
 
+        [HttpGet("apina")]
+        /*[HttpGet("{username}/{repositoryName}")]*/
+        public IActionResult RepoDetails()
+        {
+            var vm = new RepositoryManagerViewModel
+            {
+                /*Username = username ?? "Unknown",
+                IsRepoDetails = true,
+                RepositoryDetailsViewModel = new RepositoryDetailsViewModel{Username = username, RepositoryName = repositoryName},
+                RepositoryListViewModel = new RepositoryListViewModel{Repositories = null}*/
+                
+                Username = "test",
+                IsRepoDetails = true,
+                RepositoryDetailsViewModel = new RepositoryDetailsViewModel{Username = "apina", RepositoryName = "apina"},
+                RepositoryListViewModel = new RepositoryListViewModel()
+            };
+            return View("Index", vm);
+        }
+        
         public IActionResult _DeleteRepo()
         {
             // Tälle annetaan viewmodel jossa on tietty repository

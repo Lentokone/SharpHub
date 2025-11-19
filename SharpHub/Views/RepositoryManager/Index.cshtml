@@ -6,22 +6,5 @@
 }
 
 <div class="container mt-4">
-    @*
-
-    <!-- Page header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Repositories</h1>
-    </div>
-*@
-    @*
-    <!-- Optional intro / banner -->
-    <div class="alert alert-info mb-4">
-        Welcome back, <strong>@Model.Username</strong> 👋
-        Here are your repositories.
-    </div>
-*@
-
-    <!-- Repository list component -->
     <component type="typeof(RepositoryViewRouter)" render-mode="Server" param-Model="Model" />
-
 </div>
