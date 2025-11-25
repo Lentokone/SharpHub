@@ -1,4 +1,4 @@
-﻿namespace SharpHub.Models
+namespace SharpHub.Models
 {
     public class CreateRepoInput
     {

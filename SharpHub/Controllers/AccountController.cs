@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
@@ -24,7 +24,7 @@ namespace SharpHub.Controllers
         public IActionResult Login(UserLoginViewModel vm)
         {
             if (ModelState.IsValid && !string.IsNullOrEmpty(vm.Username) && !string.IsNullOrEmpty(vm.Password))
-            { 
+            {
                 var loginman = new User
                 {
                     Username = vm.Username,
