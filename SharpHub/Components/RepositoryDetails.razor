@@ -4,8 +4,48 @@
 <p>@Model.Username</p>
 <p>@Model.RepositoryName</p>
 
+<h2>@testi</h2>
+
+<button class="btn btn-primary" @onclick="ChangeMessage">Click me!</button>
+
+@if (testi == "Component is interactive!")
+{
+    <h2>koira</h2>
+}
+else
+{
+    <h2>Laatuska</h2>
+}
 @code {
     [Parameter]
     public RepositoryDetailsViewModel Model { get; set; }
 
+
+    string testi = "bob";
+
+    int ttester = 0;
+    // TOIMIII!!!!!!!!!!!!!
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This runs after hydration
+            testi = "Component is interactive!";
+            StateHasChanged(); // trigger re-render
+        }
+    }
+
+    private void ChangeMessage()
+    {
+        ttester++;
+        if (ttester < 5)
+        {
+            testi = "Button clicked!";
+        }
+        else if (ttester > 5)
+        {
+            testi = "paska";
+        }
+        else { testi = "hehaha";}
+    }
 }
