@@ -17,7 +17,7 @@ else
         <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
             <span>Repositories</span>
             @* Example future button placeholder *@
-            @* <button class="btn btn-sm btn-primary">New</button> *@
+            <button class="btn btn-sm btn-primary">New</button>
         </div>
 
         <div class="card-body p-0 overflow-auto" style="max-height: 65vh;">
@@ -26,11 +26,12 @@ else
                 {
                     <li class="list-group-item d-flex flex-column gap-1">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0">@repo.RepositoryName</h6>
-                            <a class="text-decoration-none text-dark"
-                                href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
-                                 @repo.RepositoryName
-                            </a>
+                            <h6 class="mb-0">
+                                <a class="text-decoration-none text-dark"
+                                    href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
+                                     @repo.RepositoryName
+                                </a>
+                            </h6>
                             <small class="text-muted">Updated @repo.EditedAt.ToString("MMM d, yyyy")</small>
                         </div>
 
