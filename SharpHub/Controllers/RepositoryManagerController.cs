@@ -16,8 +16,8 @@ namespace SharpHub.Controllers
         public IActionResult Index()
         {
             var owner = User.Identity?.Name;
-            List<Repository>? repos = null;
-            List<Repository> repositories = new List<Repository>();
+            List<Repository>? repos;
+            List<Repository> repositories = new();
             repos = GetListOfRepositories(owner);
             if (owner != null && repos.Count > 0)
             {
@@ -101,7 +101,7 @@ namespace SharpHub.Controllers
             var vm = new RepositoryManagerViewModel
             {
                 Username = owner ?? "Unknown",
-                RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = owner, RepositoryName = null },
+                RepositoryDetailsViewModel = null,
                 RepositoryListViewModel = new RepositoryListViewModel { Repositories = repositories }
             };
 
@@ -117,7 +117,7 @@ namespace SharpHub.Controllers
                 Username = username ?? "Unknown",
                 IsRepoDetails = true,
                 RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, RepositoryName = repositoryName },
-                RepositoryListViewModel = new RepositoryListViewModel { Repositories = null }
+                RepositoryListViewModel = null
 
                 /*
                 Username = "test",
@@ -178,7 +178,9 @@ namespace SharpHub.Controllers
             {
                 throw new InvalidOperationException("Repository path already exists.");
             }
-            string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
+            // Tarkeä?
+            // string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
+            
             var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
             MongoManipulator.Save(newRepo);
             return newRepo;
