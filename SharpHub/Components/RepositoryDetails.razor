@@ -43,6 +43,7 @@
                 </div>
                 <div class="card-body">
                     <p class="text-muted">[ README content placeholder ]</p>
+                    <Markdown style="max-height: 437px;overflow-y:auto;">@markdown</Markdown>
                 </div>
             </div>
         </div>
@@ -55,10 +56,9 @@
     [Parameter]
     public RepositoryDetailsViewModel Model { get; set; }
 
-
+    private string markdown = "# Heading 1\n## Heading 2\n\n![BlazorBootstrap](https://demos.blazorbootstrap.com/images/logo/logo-color.svg =50)";
     string testi = "Testimuuttuja";
 
-    int ttester = 0;
     // TOIMIII!!!!!!!!!!!!!
     protected override void OnAfterRender(bool firstRender)
     {
