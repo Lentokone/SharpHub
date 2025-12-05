@@ -18,15 +18,19 @@ namespace SharpHub.Controllers
             var owner = User.Identity?.Name;
             List<Repository>? repos;
             List<Repository> repositories = new();
-            repos = GetListOfRepositories(owner);
-            if (owner != null && repos.Count > 0)
+            // List<Repository> repositories = new List<Repository>();
+            
+            if (owner != null)
             {
-                repositories = repos;
+                repos = GetListOfRepositories(owner);
+                if (repos is { Count: > 0})
+                {
+                }
             }
             // Info for future me.
             // After removing the testing jumble.
             // The real repositories list is called repos. The one above, set to fetch from the database.
-            else
+            if (repositories != null)
             {
                 // This is for testing. Remember to remove.
                 repositories.Add(new Repository(
@@ -102,7 +106,7 @@ namespace SharpHub.Controllers
             {
                 Username = owner ?? "Unknown",
                 RepositoryDetailsViewModel = null,
-                RepositoryListViewModel = new RepositoryListViewModel { Repositories = repositories }
+                RepositoryListViewModel = new RepositoryListViewModel { Repositories = repositories ?? new List<Repository>() }
             };
 
             return View(vm);
@@ -114,7 +118,7 @@ namespace SharpHub.Controllers
         {
             var vm = new RepositoryManagerViewModel
             {
-                Username = username ?? "Unknown",
+                Username = username,
                 IsRepoDetails = true,
                 RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, RepositoryName = repositoryName },
                 RepositoryListViewModel = null

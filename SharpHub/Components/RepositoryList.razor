@@ -2,10 +2,6 @@
 @using SharpHub.Models.Services
 @using System.Security.Claims
 
-<h3>RepositoryList</h3>
-
-@* <p>@Model.Username</p> *@
-
 @if (!Model.Repositories.Any())
 {
     <div class="text-center p-4">
@@ -21,14 +17,14 @@ else
             <button class="btn btn-sm btn-primary">New</button>
         </div>
 
-        <div class="card-body p-0 overflow-auto" style="max-height: 65vh;">
+        <div class="card-body p-0 overflow-auto" style="max-height: 70vh;">
             <ul class="list-group list-group-flush">
                 @foreach (var repo in Model.Repositories)
                 {
                     <li class="list-group-item d-flex flex-column gap-1">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">
-                                <a class="text-decoration-none text-dark"
+                                <a class="text-decoration-none "
                                     href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
                                      @repo.RepositoryName
                                 </a>
@@ -55,11 +51,11 @@ else
 
 @code {
     [Parameter]
-    public RepositoryListViewModel Model { get; set; }
+    public required RepositoryListViewModel Model { get; set; }
     // This is still not good. Do not replace my comments copilot fool.
     // private List<Repository> repositories = Model.Repositories;
     private List<Repository> repositories = new();
-    private string? username;
+    @* private string? username; *@
 
     // This will be given a viewmodel that has the repositories fetched by the thingamajig that redirects to the component.
     // Will also have the username in the viewmodel.
