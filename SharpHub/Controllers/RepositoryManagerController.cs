@@ -116,6 +116,12 @@ namespace SharpHub.Controllers
         [HttpGet("{username}/{repositoryName}")]
         public IActionResult RepoDetails(string username, string repositoryName)
         {
+            // Tähän järkevä "if/else" joka:
+            // Tarkistaa onko /username/repository olemassa
+            // Jos on:
+            // jep.
+            // Jos ei:
+            // return Error view tai jtn
             var vm = new RepositoryManagerViewModel
             {
                 Username = username,
@@ -133,6 +139,10 @@ namespace SharpHub.Controllers
             return View("Index", vm);
         }
 
+        public IActionResult _CreateRepo()
+        {
+            return PartialView();
+        }
         public IActionResult _DeleteRepo()
         {
             // Tälle annetaan viewmodel jossa on tietty repository
@@ -153,7 +163,7 @@ namespace SharpHub.Controllers
                 return BadRequest("Required values missing.");
             var repository = CreateRepositoryCore(vm.RepositoryName, owner, vm.Description);
             //return Ok(repository);
-            return RedirectToAction("Index");
+            return RedirectToAction("RepoDetails", new { owner, vm.RepositoryName });
         }
 
         public Repository CreateRepositoryCore(string repositoryName, string owner, string description)

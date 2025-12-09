@@ -10,11 +10,46 @@
 }
 else
 {
+    @if (ModalState)
+    {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="OnBackdropClick">
+            <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
+                <div class="modal-content shadow-lg">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Repository</h5>
+                        <button type="button" class="btn-close" aria-label="Close" @onclick="HideModal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Modal content goes here. Form fields, text, whatever you want.</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" @onclick="HideModal">Cancel</button>
+                        <button class="btn btn-primary">Create</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @* <h1>testest</h1>
+        <div class="modal-backdrop" @onclick="OnBackdropClick">
+        <div class="modal-box" @onclick:stopPropagation="true">
+            <h3>Modal Title</h3>
+
+            <!-- modal body -->
+
+            <button>Accept</button>
+            <button @onclick="HideModal">Cancel</button>
+        </div>
+    </div> *@
+    }
     <div class="card shadow-sm">
         <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
             <span>Repositories</span>
             @* Example future button placeholder *@
-            <button class="btn btn-sm btn-primary">New</button>
+            <button class="btn btn-sm btn-primary" @onclick="() => ShowModal()">New</button>
         </div>
 
         <div class="card-body p-0 overflow-auto" style="max-height: 70vh;">
@@ -56,6 +91,26 @@ else
     // private List<Repository> repositories = Model.Repositories;
     private List<Repository> repositories = new();
     @* private string? username; *@
+
+    private bool ModalState;
+
+    private void ShowModal()
+    {
+        ModalState = true;
+    }
+    private void HideModal()
+    {
+        ModalState = false;
+    }
+
+    private void OnBackdropClick()
+    {
+        HideModal();
+    }
+    private async Task HandleValidSubmit()
+    {
+        
+    }
 
     // This will be given a viewmodel that has the repositories fetched by the thingamajig that redirects to the component.
     // Will also have the username in the viewmodel.

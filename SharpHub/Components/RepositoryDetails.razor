@@ -1,7 +1,53 @@
 ﻿@using SharpHub.Models
-
+@using SharpHub.Models.Services
 
 <div class="container mt-4">
+
+@* <!-- Add Expense Modal -->
+    <div class="modal fade @(showModal ? "show d-block" : "")" tabindex="-1" style="background-color: rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Expense</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@newExpense" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label for="Title" class="form-label">Title</label>
+                            <InputText id="Title" class="form-control" @bind-Value="newExpense.Title" />
+                            <ValidationMessage For="@(() => newExpense.Title)" class="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Category" class="form-label">Category</label>
+                            <InputText id="Category" class="form-control" @bind-Value="newExpense.Category" />
+                            <ValidationMessage For="@(() => newExpense.Category)" class="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Amount" class="form-label">Amount (€)</label>
+                            <InputNumber id="Amount" step="0.01" class="form-control" @bind-Value="newExpense.Amount" />
+                            <ValidationMessage For="@(() => newExpense.Amount)" class="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Date" class="form-label">Date</label>
+                            <InputDate id="Date" class="form-control" @bind-Value="newExpense.Date" />
+                            <ValidationMessage For="@(() => newExpense.Date)" class="text-danger small" />
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button type="button" class="btn btn-outline-secondary ms-2" @onclick="CloseModal">Cancel</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div> *@
 
     <!-- Repo Header -->
     <div class="mb-4">
@@ -50,7 +96,7 @@
 
     </div>
 </div>
-
+<h1>@testi</h1>
 
 @code {
     [Parameter]
@@ -59,6 +105,7 @@
     private string markdown = "# Heading 1\n## Heading 2\n\n![BlazorBootstrap](https://demos.blazorbootstrap.com/images/logo/logo-color.svg =50)";
     string testi = "Testimuuttuja";
 
+    private bool ModalState;
     // TOIMIII!!!!!!!!!!!!!
     protected override void OnAfterRender(bool firstRender)
     {
@@ -67,5 +114,29 @@
             testi = "Tästä sitten se oikea load juttu? Mikä load juttu? Siis repository data ja muut.";
             StateHasChanged();
         }
+    }
+
+    private void ShowModal()
+    {
+        ModalState = true;
+    }
+
+    private void CloseModal()
+    {
+        ModalState = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Hmm.
+        // Save käy.
+        // Kunhan se nappaa oikean Repository modelin ja vaihtaa sen repositorystate false
+        await Task.Run(() =>
+        {
+            @* MongoManipulator.Save("apina"); *@
+        });
+
+        StateHasChanged();
+        CloseModal();
     }
 }
