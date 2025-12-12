@@ -22,14 +22,35 @@ else
                     </div>
 
                     <div class="modal-body">
-                        <p>Modal content goes here. Form fields, text, whatever you want.</p>
-                    </div>
+                        <EditForm Model="@newRepo" OnValidSubmit="HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <div class="mb-3">
+                                <label for="RepositoryName" class="form-label">Repository Name</label>
+                                <InputText id="RepositoryName" class="form-control" @bind-Value="newRepo.RepositoryName" />
+                                <ValidationMessage For="@(() => newRepo.RepositoryName)" class="text-danger small" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="Description" class="form-label">Description</label>
+                                <InputTextArea id="Description" class="form-control" @bind-Value="newRepo.Description" />
+                                <ValidationMessage For="@(() => newRepo.Description)" class="text-danger small" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="GitignoreTemplate" class="form-label">.gitignore Template</label>
+                                <InputSelect id="GitignoreTemplate" class="form-select" @bind-Value="newRepo.selectedGitignore">
+                                    <option value="">None</option>
+                                    <option value="csharp">C#</option>
+                                    <option value="node">Node.js</option>
+                                    <option value="dotnet">.NET</option>
+                                    <option value="python">Python</option>
+                                </InputSelect>
+                            </div>
 
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" @onclick="HideModal">Cancel</button>
-                        <button class="btn btn-primary">Create</button>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button class="btn btn-primary">Create</button>
+                                <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
+                            </div>
+                        </EditForm>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -89,6 +110,7 @@ else
     public required RepositoryListViewModel Model { get; set; }
     // This is still not good. Do not replace my comments copilot fool.
     // private List<Repository> repositories = Model.Repositories;
+    private CreateRepoInput newRepo = new CreateRepoInput();
     private List<Repository> repositories = new();
     @* private string? username; *@
 
@@ -109,6 +131,7 @@ else
     }
     private async Task HandleValidSubmit()
     {
+        HideModal();
         
     }
 
