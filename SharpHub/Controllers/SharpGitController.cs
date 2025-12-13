@@ -20,29 +20,6 @@ namespace SharpHub.Controllers
         // No ei varmaan järjestystä enää.
         // 27/08/2025
 
-        [HttpPost("createrepo")]
-        public IActionResult CreateRepository([FromBody] CreateRepoInput cliRepoCreation)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(cliRepoCreation.RepositoryName))
-                {
-                    return BadRequest("Repository name cannot be empty.");
-                }
-                if (string.IsNullOrEmpty(cliRepoCreation.Owner))
-                {
-                    return BadRequest("Owner cannot be empty.");
-                }
-                RepositoryManagerController repoManager = new();
-                repoManager.CreateRepositoryCore(cliRepoCreation.RepositoryName, cliRepoCreation.Owner, cliRepoCreation.Description);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok("Creation successful");
-        }
-
 
         //   http://localhost:5227/api/cli/auth/consolelogin
 
@@ -109,6 +86,8 @@ namespace SharpHub.Controllers
 
         }
 
+        // Ancient code
+        
         // Mikä tämä on?
         [HttpPost("LogToDB")]
         public IActionResult LogToDB([FromBody] string monkey)
