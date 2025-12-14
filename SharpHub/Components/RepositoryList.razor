@@ -1,26 +1,16 @@
 ﻿@using SharpHub.Models
 @using SharpHub.Models.Services
 @using System.Security.Claims
-
-@if (!Model.Repositories.Any())
-{
-    <div class="text-center p-4">
-        <p class="text-muted">No repositories found.</p>
-    </div>
-}
-else
-{
-    @if (ModalState)
+<div class="container mt-4">
+@if (ModalState)
     {
         <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="OnBackdropClick">
             <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
                 <div class="modal-content shadow-lg">
-
                     <div class="modal-header">
                         <h5 class="modal-title">Create Repository</h5>
                         <button type="button" class="btn-close" aria-label="Close" @onclick="HideModal"></button>
                     </div>
-
                     <div class="modal-body">
                         <EditForm Model="@newRepo" OnValidSubmit="HandleValidSubmit">
                             <DataAnnotationsValidator />
@@ -36,7 +26,7 @@ else
                             </div>
                             <div class="mb-3">
                                 <label for="GitignoreTemplate" class="form-label">.gitignore Template</label>
-                                <InputSelect id="GitignoreTemplate" class="form-select" @bind-Value="newRepo.selectedGitignore">
+                                <InputSelect id="GitignoreTemplate" class="form-select" @bind-Value="newRepo.SelectedGitignore">
                                     <option value="">TODO: Add more stuff</option>
                                     <option value="">TODO: Maybe add checkboxes instead</option>
                                     <option value="">TODO: Add general languages (ones that I use at least)</option>
@@ -48,7 +38,6 @@ else
                                     <option value="python">Python</option>
                                 </InputSelect>
                             </div>
-
                             <div class="d-flex justify-content-end mt-3">
                                 <button class="btn btn-primary">Create</button>
                                 <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
@@ -62,11 +51,17 @@ else
     <div class="card shadow-sm">
         <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
             <span>Repositories</span>
-            @* Example future button placeholder *@
             <button class="btn btn-sm btn-primary" @onclick="() => ShowModal()">New</button>
         </div>
-
-        <div class="card-body p-0 overflow-auto" style="max-height: 70vh;">
+        @if (Model.Repositories.Any())
+        {
+            <div class="text-center p-4">
+                <p class="text-muted">No repositories found.</p>
+            </div>
+        }
+        else
+        {
+            <div class="card-body p-0 overflow-auto" style="max-height: 70vh;">
             <ul class="list-group list-group-flush">
                 @foreach (var repo in Model.Repositories)
                 {
@@ -93,8 +88,9 @@ else
                 }
             </ul>
         </div>
+        }
     </div>
-}
+</div>
 
 
 
