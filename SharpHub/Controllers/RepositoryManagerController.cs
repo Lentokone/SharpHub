@@ -25,6 +25,10 @@ namespace SharpHub.Controllers
                 repos = GetListOfRepositories(owner);
                 if (repos is { Count: > 0})
                 {
+                    foreach (Repository r in repos)
+                    {
+                        repositories.Add(r);
+                    }
                 }
             }
             // Info for future me.
@@ -39,68 +43,16 @@ namespace SharpHub.Controllers
                     description: "A C# Git wrapper",
                     repositoryPath: "/repos/sharpgit"
                 ));
-
-                repositories.Add(new Repository(
+                for (int i = 0; i < 10; i++)
+                {
+                    repositories.Add(new Repository(
                     repositoryName: "SharpHub",
                     owner: "test",
                     description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                )); repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "",
                     repositoryPath: "/repos/sharphub"
                 ));
+                }
+                
             }
             var vm = new RepositoryManagerViewModel
             {

@@ -1,6 +1,9 @@
 ﻿@using SharpHub.Models
 @using SharpHub.Models.Services
 @using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthStateProvider
+
 <div class="container mt-4">
 @if (ModalState)
     {
@@ -53,7 +56,7 @@
             <span>Repositories</span>
             <button class="btn btn-sm btn-primary" @onclick="() => ShowModal()">New</button>
         </div>
-        @if (Model.Repositories.Any())
+        @if (!Model.Repositories.Any())
         {
             <div class="text-center p-4">
                 <p class="text-muted">No repositories found.</p>
@@ -101,7 +104,7 @@
     // private List<Repository> repositories = Model.Repositories;
     private CreateRepoInput newRepo = new CreateRepoInput();
     private List<Repository> repositories = new();
-    @* private string? username; *@
+    private string? username;
 
     private bool ModalState;
 
@@ -120,8 +123,19 @@
     }
     private async Task HandleValidSubmit()
     {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            username = user.Identity.Name;
+        }
+
+        RepositoryService.CreateRepositoryCore(newRepo.RepositoryName, username, newRepo.Description);
+
+
+        StateHasChanged();
         HideModal();
-        
     }
 
     // This will be given a viewmodel that has the repositories fetched by the thingamajig that redirects to the component.
