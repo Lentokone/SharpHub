@@ -80,51 +80,8 @@ namespace SharpHub.Controllers
                 IsRepoDetails = true,
                 RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, RepositoryName = repositoryName },
                 RepositoryListViewModel = null
-
-                /*
-                Username = "test",
-                IsRepoDetails = true,
-                RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = "apina", RepositoryName = "apina" },
-                RepositoryListViewModel = new RepositoryListViewModel()
-                */
             };
             return View("Index", vm);
-        }
-
-        /*
-        * Redundant
-        */
-        public IActionResult _CreateRepo()
-        {
-            return PartialView();
-        }
-        /*
-        * Redundant?
-        */
-        public IActionResult _DeleteRepo()
-        {
-            // Tälle annetaan viewmodel jossa on tietty repository
-            // On käytössä vaan RepositoryDetails komponentissa.
-            return PartialView();
-        }
-        /*
-        * Redundant?
-        */
-
-        [HttpPost]
-        public IActionResult CreateRepositoryMVC(CreateRepositoryViewModel vm)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var owner = User.Identity?.Name;
-
-            if (string.IsNullOrWhiteSpace(vm.RepositoryName) || string.IsNullOrWhiteSpace(owner))
-                return BadRequest("Required values missing.");
-            var repository = CreateRepositoryCore(vm.RepositoryName, owner, vm.Description);
-            //return Ok(repository);
-            return RedirectToAction("RepoDetails", new { owner, vm.RepositoryName });
         }
 
         public Repository CreateRepositoryCore(string repositoryName, string owner, string description)
@@ -161,21 +118,6 @@ namespace SharpHub.Controllers
             return newRepo;
         }
 
-
-        /*
-         * -----------------
-         * TAG OF REDUNDANCY
-         * -----------------
-         */
-        // Tämä ei tule toimimaan
-        // Varmaan parempi hakea repo nimellä
-        public Repository GetRepository(Repository wantedRepo)
-        {
-            wantedRepo = MongoManipulator.Search(wantedRepo);
-            return wantedRepo;
-        }
-
-
         /*
          * -----------------
          * TAG OF REDUNDANCY
@@ -201,26 +143,9 @@ namespace SharpHub.Controllers
                 return [];
             }
         }
-        /*
-         * -----------------
-         * TAG OF REDUNDANCY
-         * -----------------
-         */
 
-        /*
-         * ------------
-         * TAG OF MAYBE
-         * ------------
-         */
-        public List<string> GetListOfRepositoryNames(string owner)
-        {
-            var repos = GetListOfRepositories(owner);
-            return [.. repos.Select(r => r.RepositoryName)];
-        }
-
-
-
-
+        // ?
+        /* ? REDUNDANT?*/
         public IActionResult ChangeRepoDescription(Repository wantedRepo, string newDesc)
         {
             if (string.IsNullOrWhiteSpace(newDesc) || wantedRepo == null)
@@ -230,12 +155,6 @@ namespace SharpHub.Controllers
             wantedRepo.Description = newDesc;
             MongoManipulator.Save(wantedRepo);
             return Ok();
-        }
-
-        public void DeleteRepository(Repository repository)
-        {
-            repository.IsDeleted = true;
-            repository.DeletedAt = DateTime.UtcNow;
         }
     }
 }
