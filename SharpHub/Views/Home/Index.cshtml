@@ -8,7 +8,9 @@
     <h2 class="display-6">My take on a bootleg Github</h2>
 </div>
 
-<div class="test_remember_to_delete">
-    @* <component type="typeof(Blazortest)" render-mode="Server"/> *@
-    
-</div>
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["error"]
+    </div>
+}

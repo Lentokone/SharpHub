@@ -74,11 +74,17 @@ namespace SharpHub.Controllers
             // jep.
             // Jos ei:
             // return Error view tai jtn
+            var repositoryToShow = MongoManipulator.SearchRepositoryByName(repositoryName, username);
+            if (repositoryToShow is null)
+            {
+                TempData["error"] = "No such repository found";
+                return RedirectToAction("Index", "Home");
+            }
             var vm = new RepositoryManagerViewModel
             {
                 Username = username,
                 IsRepoDetails = true,
-                RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, RepositoryName = repositoryName },
+                RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, CurrentRepository = repositoryToShow },
                 RepositoryListViewModel = null
             };
             return View("Index", vm);

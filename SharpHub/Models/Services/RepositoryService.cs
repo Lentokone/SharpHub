@@ -42,5 +42,10 @@ namespace SharpHub.Models.Services
             MongoManipulator.Save(newRepo);
             return newRepo;
         }
+
+        public static void DeleteRepository()
+        {
+            
+        }
     }
 }

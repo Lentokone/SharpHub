@@ -18,9 +18,7 @@
                         <EditForm Model="@newRepo" OnValidSubmit="HandleValidSubmit">
                             <DataAnnotationsValidator />
                             <div class="mb-3">
-                                <label for="RepositoryName" class="form-label">Repository Name</label>
-                                <InputText id="RepositoryName" class="form-control" @bind-Value="newRepo.RepositoryName" />
-                                <ValidationMessage For="@(() => newRepo.RepositoryName)" class="text-danger small" />
+                                <h1>Are you sure you want to delete @Model.RepositoryName ?</h1>
                             </div>
                             <div class="d-flex justify-content-end mt-3">
                                 <button class="btn btn-primary">Yes</button>
@@ -35,8 +33,8 @@
 
     <!-- Repo Header -->
     <div class="mb-4">
-        <h1 class="fw-bold">@Model.RepositoryName</h1>
-        <p class="text-muted">Repository description goes here…</p>
+        <h1 class="fw-bold">@Model.CurrentRepository.RepositoryName</h1>
+        <p class="text-muted">@Model.CurrentRepository.Description</p>
     </div>
 
     <!-- Clone Section -->
