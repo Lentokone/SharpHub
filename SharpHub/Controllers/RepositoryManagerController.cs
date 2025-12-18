@@ -34,26 +34,26 @@ namespace SharpHub.Controllers
             // Info for future me.
             // After removing the testing jumble.
             // The real repositories list is called repos. The one above, set to fetch from the database.
-            if (repositories != null)
-            {
-                // This is for testing. Remember to remove.
-                repositories.Add(new Repository(
-                    repositoryName: "SharpGit",
-                    owner: "test",
-                    description: "A C# Git wrapper",
-                    repositoryPath: "/repos/sharpgit"
-                ));
-                for (int i = 0; i < 10; i++)
-                {
-                    repositories.Add(new Repository(
-                    repositoryName: "SharpHub",
-                    owner: "test",
-                    description: "The MVC frontend for SharpGit",
-                    repositoryPath: "/repos/sharphub"
-                ));
-                }
+            // if (repositories != null)
+            // {
+            //     // This is for testing. Remember to remove.
+            //     repositories.Add(new Repository(
+            //         repositoryName: "SharpGit",
+            //         owner: "test",
+            //         description: "A C# Git wrapper",
+            //         repositoryPath: "/repos/sharpgit"
+            //     ));
+            //     for (int i = 0; i < 10; i++)
+            //     {
+            //         repositories.Add(new Repository(
+            //         repositoryName: "SharpHub",
+            //         owner: "test",
+            //         description: "The MVC frontend for SharpGit",
+            //         repositoryPath: "/repos/sharphub"
+            //     ));
+            //     }
                 
-            }
+            // }
             var vm = new RepositoryManagerViewModel
             {
                 Username = owner ?? "Unknown",

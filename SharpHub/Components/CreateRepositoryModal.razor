@@ -1,0 +1,85 @@
+@using SharpHub.Models
+@using SharpHub.Models.Services
+
+@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="HandleBackdropClick">
+    <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Repository</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@NewRepositoryInput" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    @* <ValidationSummary /> *@
+                    <div class="mb-3">
+                        <label for="RepositoryName" class="form-label">Repository Name</label>
+                        <InputText id="RepositoryName" class="form-control" @bind-Value="NewRepositoryInput.RepositoryName" />
+                        <ValidationMessage For="@(() => NewRepositoryInput.RepositoryName)" class="text-danger small" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Description</label>
+                        <InputTextArea id="Description" class="form-control" @bind-Value="NewRepositoryInput.Description" />
+                        <ValidationMessage For="@(() => NewRepositoryInput.Description)" class="text-danger small" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="GitignoreTemplate" class="form-label">.gitignore Template</label>
+                        <InputSelect id="GitignoreTemplate" class="form-select" @bind-Value="NewRepositoryInput.SelectedGitignore">
+                            <option value="">TODO: Add more stuff</option>
+                            <option value="">TODO: Maybe add checkboxes instead</option>
+                            <option value="">TODO: Add general languages (ones that I use at least)</option>
+                            <option value="">TODO: Add general Editors (ones that I use at least)</option>
+                            <option value="">None</option>
+                            <option value="csharp">C#</option>
+                            <option value="node">Node.js</option>
+                            <option value="dotnet">.NET</option>
+                            <option value="python">Python</option>
+                        </InputSelect>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-primary">Create</button>
+                        <button class="btn btn-outline-secondary ms-2" @onclick="CloseModal">Cancel</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    @* private EventCallback<Repository> *@
+    [Parameter] public EventCallback CloseModal { get; set;}
+    [Parameter] public EventCallback<Repository> AddingToList { get; set; }
+    private CreateRepoInput NewRepositoryInput = new CreateRepoInput();
+    private string? username;
+
+    private async Task HandleBackdropClick()
+    {
+        await CloseModal.InvokeAsync();
+    }
+
+    private async Task HandleModalClose()
+    {
+        await CloseModal.InvokeAsync();
+    }
+    private async Task HandleValidSubmit()
+    {
+        if (string.IsNullOrWhiteSpace(NewRepositoryInput.RepositoryName))
+            return;        
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            username = user.Identity.Name;
+        }
+
+        Repository NewRepository = RepositoryService.CreateRepositoryCore(NewRepositoryInput.RepositoryName, username, NewRepositoryInput.Description);
+        await AddingToList.InvokeAsync(NewRepository);
+        await CloseModal.InvokeAsync();
+    }
+}
