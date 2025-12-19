@@ -1,9 +1,11 @@
 ﻿@using SharpHub.Models
 @using SharpHub.Models.Services
 
+@inject NavigationManager Nav
+
 <div class="container mt-4">
 
-@* @if (ModalState)
+@if (ModalState)
     {
         <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="OnBackdropClick">
             <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
@@ -15,43 +17,35 @@
                     </div>
 
                     <div class="modal-body">
-                        <EditForm Model="@newRepo" OnValidSubmit="HandleValidSubmit">
-                            <DataAnnotationsValidator />
-                            <div class="mb-3">
-                                <h1>Are you sure you want to delete @Model.RepositoryName ?</h1>
-                            </div>
-                            <div class="d-flex justify-content-end mt-3">
-                                <button class="btn btn-primary">Yes</button>
-                                <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
-                            </div>
-                        </EditForm>
+                        <div class="mb-3">
+                            <span class="fw-semibold">Are you sure you want to delete @Model.CurrentRepository.RepositoryName ?</span>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button class="btn btn-primary" @onclick="HandleDeletion" >Yes</button>
+                            <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    } *@
+    }
 
-    <!-- Repo Header -->
     <div class="mb-4">
         <h1 class="fw-bold">@Model.CurrentRepository.RepositoryName</h1>
         <p class="text-muted">@Model.CurrentRepository.Description</p>
     </div>
-
-    <!-- Clone Section -->
     <div class="card mb-4">
         <div class="card-body d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">Clone this repository</span>
+            <span class="fw-semibold">Clone or download as zip, this repository Tai vaikka delete</span>
         </div>
     </div>
     <div class="card mb-4">
         <div class="card-body d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">@testi</span>
+            <span class="fw-semibold">Unohdin jo mikä tämäkin oli</span>
+            <button class="btn btn-sm btn-primary" @onclick="() => ShowModal()">Delete</button>
         </div>
     </div>
-
     <div class="row">
-
-        <!-- Tree Sidebar -->
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header fw-semibold">
@@ -62,8 +56,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- README Renderer -->
         <div class="col-md-8 mb-4">
             <div class="card h-100">
                 <div class="card-header fw-semibold">
@@ -75,25 +67,20 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-<h1>@testi</h1>
 
 @code {
     [Parameter]
     public required RepositoryDetailsViewModel Model { get; set; }
 
     private string markdown = "# Heading 1\n## Heading 2\n\n![BlazorBootstrap](https://demos.blazorbootstrap.com/images/logo/logo-color.svg =50)";
-    string testi = "Testimuuttuja";
 
     private bool ModalState;
-    // TOIMIII!!!!!!!!!!!!!
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            testi = "Tästä sitten se oikea load juttu? Mikä load juttu? Siis repository data ja muut.";
             StateHasChanged();
         }
     }
@@ -103,22 +90,28 @@
         ModalState = true;
     }
 
-    private void CloseModal()
+    private void HideModal()
     {
         ModalState = false;
     }
 
-    private async Task HandleValidSubmit()
+    private void OnBackdropClick()
+    {
+        HideModal();
+    }
+    private void HandleDeletion()
     {
         // Hmm.
         // Save käy.
         // Kunhan se nappaa oikean Repository modelin ja vaihtaa sen repositorystate false
-        await Task.Run(() =>
-        {
-            @* MongoManipulator.Save("apina"); *@
-        });
+        
+        Model.CurrentRepository.IsDeleted = true;
 
+        MongoManipulator.Save(Model.CurrentRepository);
+        
+        Console.WriteLine("Test");
+        Nav.NavigateTo("/RepositoryManager", forceLoad: true);
+        HideModal();
         StateHasChanged();
-        CloseModal();
     }
 }
