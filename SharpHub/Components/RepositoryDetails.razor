@@ -101,12 +101,10 @@
     }
     private void HandleDeletion()
     {
-        // Hmm.
-        // Save käy.
-        // Kunhan se nappaa oikean Repository modelin ja vaihtaa sen repositorystate false
-        
+        // Note to self:
+        // Current saving does not work, as it requires the correct mongo _id to do stuff.
+        // Right now, it will make a duplicate object into the database with the IsDeleted set as true, not modifying the actual object at all
         Model.CurrentRepository.IsDeleted = true;
-
         MongoManipulator.Save(Model.CurrentRepository);
         
         Console.WriteLine("Test");

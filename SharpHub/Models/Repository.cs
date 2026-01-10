@@ -16,10 +16,10 @@
          * 
          *public string Visibility { get; set; } = "Public"; // Default visibility is Public
          *public List<string> Collaborators { get; set; } = new List<string>();
-         */
+        */
 
         public Repository(string repositoryName, string owner, string description, string repositoryPath)
-            {
+        {
             RepositoryName = repositoryName;
             Owner = owner;
             Description = description ?? "";

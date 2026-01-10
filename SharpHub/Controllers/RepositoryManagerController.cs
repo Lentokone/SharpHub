@@ -27,7 +27,8 @@ namespace SharpHub.Controllers
                 {
                     foreach (Repository r in repos)
                     {
-                        repositories.Add(r);
+                        if (!r.IsDeleted)
+                            repositories.Add(r);
                     }
                 }
             }

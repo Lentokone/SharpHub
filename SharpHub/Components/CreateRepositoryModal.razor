@@ -13,7 +13,6 @@
             <div class="modal-body">
                 <EditForm Model="@NewRepositoryInput" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
-                    @* <ValidationSummary /> *@
                     <div class="mb-3">
                         <label for="RepositoryName" class="form-label">Repository Name</label>
                         <InputText id="RepositoryName" class="form-control" @bind-Value="NewRepositoryInput.RepositoryName" />
@@ -50,7 +49,6 @@
 
 @code
 {
-    @* private EventCallback<Repository> *@
     [Parameter] public EventCallback CloseModal { get; set;}
     [Parameter] public EventCallback<Repository> AddingToList { get; set; }
     private CreateRepoInput NewRepositoryInput = new CreateRepoInput();
