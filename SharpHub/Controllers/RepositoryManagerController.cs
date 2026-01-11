@@ -85,7 +85,7 @@ namespace SharpHub.Controllers
             {
                 Username = username,
                 IsRepoDetails = true,
-                RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, CurrentRepository = repositoryToShow },
+                RepositoryDetailsViewModel = new RepositoryDetailsViewModel { Username = username, ObjectId = repositoryToShow._id.ToString(), CurrentRepository = repositoryToShow },
                 RepositoryListViewModel = null
             };
             return View("Index", vm);

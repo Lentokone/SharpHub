@@ -139,7 +139,10 @@ namespace SharpHub.Models.Services
         public static List<Repository> SearchAllRepositories(string userName)
         {
             var MongoTable = GetDB().GetCollection<Repository>("Repository");
-            var filter = Builders<Repository>.Filter.Eq("Owner", userName);
+            var filter = Builders<Repository>.Filter.And(
+                Builders<Repository>.Filter.Eq(r => r.Owner, userName),
+                Builders<Repository>.Filter.Eq(r => r.IsDeleted, false)
+            );
             return MongoTable.Find(filter).ToList();
         }
     }
