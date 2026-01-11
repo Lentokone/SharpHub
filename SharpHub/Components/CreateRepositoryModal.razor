@@ -70,8 +70,8 @@
 
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-
-        if (user.Identity?.IsAuthenticated ?? false)
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        @* if (user.Identity.IsAuthenticated is not false) *@
         {
             username = user.Identity.Name;
         }
