@@ -52,7 +52,6 @@
     [Parameter] public EventCallback CloseModal { get; set;}
     [Parameter] public EventCallback<Repository> AddingToList { get; set; }
     private CreateRepoInput NewRepositoryInput = new CreateRepoInput();
-    private string? username;
 
     private async Task HandleBackdropClick()
     {
@@ -70,10 +69,10 @@
 
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        if (user.Identity != null && user.Identity.IsAuthenticated)
-        @* if (user.Identity.IsAuthenticated is not false) *@
+        if (user.Identity?.Name is not string username)
         {
-            username = user.Identity.Name;
+            @* username = user.Identity.Name;  *@
+            throw new InvalidOperationException("User is not authenticated");
         }
 
         Repository NewRepository = RepositoryService.CreateRepositoryCore(NewRepositoryInput.RepositoryName, username, NewRepositoryInput.Description);

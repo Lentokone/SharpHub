@@ -14,7 +14,7 @@
 
         /*For later expansion
          * 
-         *public string Visibility { get; set; } = "Public"; // Default visibility is Public
+         *public string Visibility { get; set; } = "Private"; // Default visibility is Private
          *public List<string> Collaborators { get; set; } = new List<string>();
         */
 
