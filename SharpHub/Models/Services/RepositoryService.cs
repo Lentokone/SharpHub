@@ -37,7 +37,7 @@ namespace SharpHub.Models.Services
             }
             // Tarkeä?
             string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
-            
+
             var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
             MongoManipulator.Save(newRepo);
             return newRepo;
@@ -45,7 +45,7 @@ namespace SharpHub.Models.Services
 
         public static void DeleteRepository()
         {
-            
+
         }
     }
 }

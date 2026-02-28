@@ -11,12 +11,10 @@
         <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="OnBackdropClick">
             <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
                 <div class="modal-content shadow-lg">
-
                     <div class="modal-header">
                         <h5 class="modal-title">Delete Repository</h5>
                         <button type="button" class="btn-close" aria-label="Close" @onclick="HideModal"></button>
                     </div>
-
                     <div class="modal-body">
                         <div class="mb-3">
                             <span class="fw-semibold">Are you sure you want to delete @Model.CurrentRepository.RepositoryName ?</span>
@@ -30,7 +28,6 @@
             </div>
         </div>
     }
-
     <div class="mb-4">
         <h1 class="fw-bold">@Model.CurrentRepository.RepositoryName</h1>
         <p class="text-muted">@Model.CurrentRepository.Description</p>
@@ -75,6 +72,9 @@
     [Parameter]
     public required RepositoryDetailsViewModel Model { get; set; }
 
+<!-- This is only for testing.
+     It will fetch the repository README properly
+-->
     private string markdown = "# Heading 1\n## Heading 2\n\n![BlazorBootstrap](https://demos.blazorbootstrap.com/images/logo/logo-color.svg =50)";
 
     private bool ModalState;
@@ -106,7 +106,7 @@
 
         Model.CurrentRepository.IsDeleted = true;
         MongoManipulator.Save(Model.CurrentRepository);
-        
+
         Console.WriteLine("HandleDeletion() called");
         Nav.NavigateTo("/RepositoryManager", forceLoad: true);
         HideModal();

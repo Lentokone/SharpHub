@@ -4,52 +4,9 @@
 
 @inject AuthenticationStateProvider AuthStateProvider
 <div class="container mt-4">
-@if (ModalState)
+    @if (ModalState)
     {
-        <CreateRepositoryModal CloseModal="HideModal" AddingToList="AddToList"/>
-        @* <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="OnBackdropClick">
-            <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
-                <div class="modal-content shadow-lg">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create Repository</h5>
-                        <button type="button" class="btn-close" aria-label="Close" @onclick="HideModal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <EditForm Model="@newRepo" OnValidSubmit="HandleValidSubmit">
-                            <DataAnnotationsValidator />
-                            <div class="mb-3">
-                                <label for="RepositoryName" class="form-label">Repository Name</label>
-                                <InputText id="RepositoryName" class="form-control" @bind-Value="newRepo.RepositoryName" />
-                                <ValidationMessage For="@(() => newRepo.RepositoryName)" class="text-danger small" />
-                            </div>
-                            <div class="mb-3">
-                                <label for="Description" class="form-label">Description</label>
-                                <InputTextArea id="Description" class="form-control" @bind-Value="newRepo.Description" />
-                                <ValidationMessage For="@(() => newRepo.Description)" class="text-danger small" />
-                            </div>
-                            <div class="mb-3">
-                                <label for="GitignoreTemplate" class="form-label">.gitignore Template</label>
-                                <InputSelect id="GitignoreTemplate" class="form-select" @bind-Value="newRepo.SelectedGitignore">
-                                    <option value="">TODO: Add more stuff</option>
-                                    <option value="">TODO: Maybe add checkboxes instead</option>
-                                    <option value="">TODO: Add general languages (ones that I use at least)</option>
-                                    <option value="">TODO: Add general Editors (ones that I use at least)</option>
-                                    <option value="">None</option>
-                                    <option value="csharp">C#</option>
-                                    <option value="node">Node.js</option>
-                                    <option value="dotnet">.NET</option>
-                                    <option value="python">Python</option>
-                                </InputSelect>
-                            </div>
-                            <div class="d-flex justify-content-end mt-3">
-                                <button class="btn btn-primary">Create</button>
-                                <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
-                            </div>
-                        </EditForm>
-                    </div>
-                </div>
-            </div>
-        </div> *@
+        <CreateRepositoryModal CloseModal="HideModal" AddingToList="AddToList" />
     }
     <div class="card shadow-sm">
         <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
@@ -65,59 +22,56 @@
         else
         {
             <div class="card-body p-0 overflow-auto" style="max-height: 70vh;">
-            <ul class="list-group list-group-flush">
-                @foreach (var repo in Model.Repositories)
-                {
-                    <li class="list-group-item d-flex flex-column gap-1">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0">
-                                <a class="text-decoration-none "
-                                    href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
-                                     @repo.RepositoryName
-                                </a>
-                            </h6>
-                            <small class="text-muted">Updated @repo.EditedAt.ToString("MMM d, yyyy")</small>
-                        </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var repo in Model.Repositories)
+                    {
+                        <li class="list-group-item d-flex flex-column gap-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">
+                                    <a class="text-decoration-none " href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
+                                        @repo.RepositoryName
+                                    </a>
+                                </h6>
+                                <small class="text-muted">Updated @repo.EditedAt.ToString("MMM d, yyyy")</small>
+                            </div>
 
-                        @if (!string.IsNullOrWhiteSpace(repo.Description))
-                        {
-                            <p class="mb-1 text-muted">@repo.Description</p>
-                        }
-                        else
-                        {
-                            <p class="mb-1 text-muted">&nbsp;</p>
-                        }
-                    </li>
-                }
-                @foreach (var repo in repositories)
-                {
-                    <li class="list-group-item d-flex flex-column gap-1">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0">
-                                <a class="text-decoration-none "
-                                    href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
-                                     @repo.RepositoryName
-                                </a>
-                            </h6>
-                            <small class="text-muted">Updated @repo.EditedAt.ToString("MMM d, yyyy")</small>
-                        </div>
+                            @if (!string.IsNullOrWhiteSpace(repo.Description))
+                            {
+                                <p class="mb-1 text-muted">@repo.Description</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-muted">&nbsp;</p>
+                            }
+                        </li>
+                    }
+                    @foreach (var repo in repositories)
+                    {
+                        <li class="list-group-item d-flex flex-column gap-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">
+                                    <a class="text-decoration-none " href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
+                                        @repo.RepositoryName
+                                    </a>
+                                </h6>
+                                <small class="text-muted">Updated @repo.EditedAt.ToString("MMM d, yyyy")</small>
+                            </div>
 
-                        @if (!string.IsNullOrWhiteSpace(repo.Description))
-                        {
-                            <p class="mb-1 text-muted">@repo.Description</p>
-                        }
-                        else
-                        {
-                            <p class="mb-1 text-muted">&nbsp;</p>
-                        }
-                    </li>
-                }
-            </ul>
-        </div>
+                            @if (!string.IsNullOrWhiteSpace(repo.Description))
+                            {
+                                <p class="mb-1 text-muted">@repo.Description</p>
+                            }
+                            else
+                            {
+                                <p class="mb-1 text-muted">&nbsp;</p>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
         }
     </div>
 </div>
-
 
 
 @code {
@@ -125,7 +79,7 @@
     public required RepositoryListViewModel Model { get; set; }
     // This is still not good. Do not replace my comments copilot fool.
     // private List<Repository> repositories = Model.Repositories;
-    
+
     private List<Repository> repositories = new();
     private bool ModalState;
 
@@ -143,7 +97,7 @@
     {
         HideModal();
     }
-    
+
     private void AddToList(Repository NewRepo)
     {
         @* repositories = repositories.Append(NewRepo).ToList(); *@
@@ -152,10 +106,6 @@
         StateHasChanged();
         HideModal();
     }
-
-    // This will be given a viewmodel that has the repositories fetched by the thingamajig that redirects to the component.
-    // Will also have the username in the viewmodel.
-    // For fetching after editing and such...
 }
 
 @* Good luck, Me! *@

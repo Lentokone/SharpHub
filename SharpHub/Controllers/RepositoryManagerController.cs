@@ -18,8 +18,9 @@ namespace SharpHub.Controllers
             var owner = User.Identity?.Name;
             List<Repository>? repos;
             List<Repository> repositories = new();
-            // List<Repository> repositories = new List<Repository>();
-            
+
+            //NOTE Remember to nuke the second List when done.
+
             if (owner != null)
             {
                 repos = GetListOfRepositories(owner);
@@ -32,29 +33,6 @@ namespace SharpHub.Controllers
                     }
                 }
             }
-            // Info for future me.
-            // After removing the testing jumble.
-            // The real repositories list is called repos. The one above, set to fetch from the database.
-            // if (repositories != null)
-            // {
-            //     // This is for testing. Remember to remove.
-            //     repositories.Add(new Repository(
-            //         repositoryName: "SharpGit",
-            //         owner: "test",
-            //         description: "A C# Git wrapper",
-            //         repositoryPath: "/repos/sharpgit"
-            //     ));
-            //     for (int i = 0; i < 10; i++)
-            //     {
-            //         repositories.Add(new Repository(
-            //         repositoryName: "SharpHub",
-            //         owner: "test",
-            //         description: "The MVC frontend for SharpGit",
-            //         repositoryPath: "/repos/sharphub"
-            //     ));
-            //     }
-                
-            // }
             var vm = new RepositoryManagerViewModel
             {
                 Username = owner ?? "Unknown",
@@ -65,16 +43,9 @@ namespace SharpHub.Controllers
             return View(vm);
         }
 
-        //[HttpGet("apina")]
         [HttpGet("{username}/{repositoryName}")]
         public IActionResult RepoDetails(string username, string repositoryName)
         {
-            // Tähän järkevä "if/else" joka:
-            // Tarkistaa onko /username/repository olemassa
-            // Jos on:
-            // jep.
-            // Jos ei:
-            // return Error view tai jtn
             var repositoryToShow = MongoManipulator.SearchRepositoryByName(repositoryName, username);
             if (repositoryToShow is null)
             {
@@ -97,8 +68,6 @@ namespace SharpHub.Controllers
             {
                 throw new ArgumentException("Invalid repository input.");
             }
-            // var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
-            // var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, $"{repositoryName}.git");
 
             if (MongoManipulator.RepositoryExists(owner, repositoryName))
             {
@@ -118,6 +87,7 @@ namespace SharpHub.Controllers
                 throw new InvalidOperationException("Repository path already exists.");
             }
             // Tarkeä?
+            // 26/02/2026. On varmaan tärkeä. Oletan että tuo tekee sen Bare repository, palvelimelle
             // string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
             
             var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
@@ -133,6 +103,10 @@ namespace SharpHub.Controllers
         // Tulevaisuuden arvoikas Olli.
         // Muista tarkistaa mitä kirjoitat kun olet humalassa.
         // Ettet unohda mitään tyhmää.
+        //
+        // 26/02/2026
+        // Ei ole reedundantti
+        // Tärkeä kai, emt, mutta on käytössä
         public List<Repository> GetListOfRepositories(string owner)
         {
             if (string.IsNullOrEmpty(owner))

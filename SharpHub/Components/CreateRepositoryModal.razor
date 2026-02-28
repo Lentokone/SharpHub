@@ -3,7 +3,8 @@
 
 @inject AuthenticationStateProvider AuthStateProvider
 
-<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="HandleBackdropClick">
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);"
+     @onclick="HandleBackdropClick">
     <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
         <div class="modal-content shadow-lg">
             <div class="modal-header">
@@ -15,17 +16,20 @@
                     <DataAnnotationsValidator />
                     <div class="mb-3">
                         <label for="RepositoryName" class="form-label">Repository Name</label>
-                        <InputText id="RepositoryName" class="form-control" @bind-Value="NewRepositoryInput.RepositoryName" />
+                        <InputText id="RepositoryName" class="form-control"
+                                   @bind-Value="NewRepositoryInput.RepositoryName" />
                         <ValidationMessage For="@(() => NewRepositoryInput.RepositoryName)" class="text-danger small" />
                     </div>
                     <div class="mb-3">
                         <label for="Description" class="form-label">Description</label>
-                        <InputTextArea id="Description" class="form-control" @bind-Value="NewRepositoryInput.Description" />
+                        <InputTextArea id="Description" class="form-control"
+                                       @bind-Value="NewRepositoryInput.Description" />
                         <ValidationMessage For="@(() => NewRepositoryInput.Description)" class="text-danger small" />
                     </div>
                     <div class="mb-3">
                         <label for="GitignoreTemplate" class="form-label">.gitignore Template</label>
-                        <InputSelect id="GitignoreTemplate" class="form-select" @bind-Value="NewRepositoryInput.SelectedGitignore">
+                        <InputSelect id="GitignoreTemplate" class="form-select"
+                                     @bind-Value="NewRepositoryInput.SelectedGitignore">
                             <option value="">TODO: Add more stuff</option>
                             <option value="">TODO: Maybe add checkboxes instead</option>
                             <option value="">TODO: Add general languages (ones that I use at least)</option>
@@ -49,7 +53,7 @@
 
 @code
 {
-    [Parameter] public EventCallback CloseModal { get; set;}
+    [Parameter] public EventCallback CloseModal { get; set; }
     [Parameter] public EventCallback<Repository> AddingToList { get; set; }
     private CreateRepoInput NewRepositoryInput = new CreateRepoInput();
 
@@ -65,17 +69,17 @@
     private async Task HandleValidSubmit()
     {
         if (string.IsNullOrWhiteSpace(NewRepositoryInput.RepositoryName))
-            return;        
+            return;
 
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         if (user.Identity?.Name is not string username)
         {
-            @* username = user.Identity.Name;  *@
             throw new InvalidOperationException("User is not authenticated");
         }
 
-        Repository NewRepository = RepositoryService.CreateRepositoryCore(NewRepositoryInput.RepositoryName, username, NewRepositoryInput.Description);
+        Repository NewRepository = RepositoryService.CreateRepositoryCore(NewRepositoryInput.RepositoryName, username,
+        NewRepositoryInput.Description);
         await AddingToList.InvokeAsync(NewRepository);
         await CloseModal.InvokeAsync();
     }
