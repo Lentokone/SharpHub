@@ -10,3 +10,5 @@ Should be last and working test
 Now possibly last test for post-receive hook
 
 Now last test?
+
+Quick test for the server
