@@ -7,8 +7,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorComponents();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddSingleton<JwtTokenService>();
-
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
