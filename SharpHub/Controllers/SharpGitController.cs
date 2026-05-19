@@ -20,14 +20,12 @@ namespace SharpHub.Controllers
         // curl -H "Content-Type: application/json" -d "monkey" https://localhost:7173/api/cli/auth/consolelogin
         // Powershit käyttääkin invoke-restmethod jolla on vaan "curl" alias jostain syystä
 
-        // Tällä psh komennolla saa kiinni.
-        // Invoke-RestMethod -Uri http://localhost:5227/consolelogin -Method POST -Body '"monkey"' -ContentType 'application/json'
-        // Tähän napataan se RateLimit Nuugetti paketti.
-        // Ja annettu on model jossa on user credentials ja sitten super secret string, joka tarkistetaan.
-
         // Ajan 22.11. 0:34 Olli
         // Eli tämä on se endpoint johon SharpGit lähettää kirjautumistiedot
         // Ja palauttaa refresh token.
+        //
+        // Ajan 19.05. 14:06 Olli
+        // Jotain
         [HttpPost("consolelogin")]
         public IActionResult ConsoleLogin([FromBody] UserLoginForCLI cliLoginContent)
         {

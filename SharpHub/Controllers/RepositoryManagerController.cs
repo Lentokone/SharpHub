@@ -12,6 +12,7 @@ namespace SharpHub.Controllers
     public class RepositoryManagerController : Controller
     {
         private const string REPO_BASE_PATH = "/var/sharphub/repos";
+
         [HttpGet("")]
         public IActionResult Index()
         {
@@ -19,12 +20,10 @@ namespace SharpHub.Controllers
             List<Repository>? repos;
             List<Repository> repositories = new();
 
-            //NOTE Remember to nuke the second List when done.
-
             if (owner != null)
             {
                 repos = GetListOfRepositories(owner);
-                if (repos is { Count: > 0})
+                if (repos is { Count: > 0 })
                 {
                     foreach (Repository r in repos)
                     {
@@ -89,7 +88,7 @@ namespace SharpHub.Controllers
             // Tarkeä?
             // 26/02/2026. On varmaan tärkeä. Oletan että tuo tekee sen Bare repository, palvelimelle
             // string rootedPath = LibGit2Sharp.Repository.Init(repositoryPath, true);
-            
+
             var newRepo = new Repository(repositoryName, owner, description, repositoryPath);
             MongoManipulator.Save(newRepo);
             return newRepo;

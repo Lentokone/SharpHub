@@ -45,28 +45,6 @@
                             }
                         </li>
                     }
-                    @foreach (var repo in repositories)
-                    {
-                        <li class="list-group-item d-flex flex-column gap-1">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0">
-                                    <a class="text-decoration-none " href="/RepositoryManager/@repo.Owner/@repo.RepositoryName">
-                                        @repo.RepositoryName
-                                    </a>
-                                </h6>
-                                <small class="text-muted">Updated @repo.EditedAt.ToString("MMM d, yyyy")</small>
-                            </div>
-
-                            @if (!string.IsNullOrWhiteSpace(repo.Description))
-                            {
-                                <p class="mb-1 text-muted">@repo.Description</p>
-                            }
-                            else
-                            {
-                                <p class="mb-1 text-muted">&nbsp;</p>
-                            }
-                        </li>
-                    }
                 </ul>
             </div>
         }
@@ -77,10 +55,7 @@
 @code {
     [Parameter]
     public required RepositoryListViewModel Model { get; set; }
-    // This is still not good. Do not replace my comments copilot fool.
-    // private List<Repository> repositories = Model.Repositories;
 
-    private List<Repository> repositories = new();
     private bool ModalState;
 
     private void ShowModal()
@@ -100,9 +75,8 @@
 
     private void AddToList(Repository NewRepo)
     {
-        @* repositories = repositories.Append(NewRepo).ToList(); *@
-        repositories.Add(NewRepo);
-        Console.WriteLine($"Added: {NewRepo.RepositoryName}, total count: {repositories.Count}");
+        Model.Repositories.Add(NewRepo);
+        Console.WriteLine($"Added: {NewRepo.RepositoryName}, total count: {Model.Repositories.Count}");
         StateHasChanged();
         HideModal();
     }
@@ -112,7 +86,8 @@
 
 @* Luck is what I will need *@
 @*
-    Oli iso ongelma missä tuo CreateRepositoryModal komponentin tekemä uusi Repository objekti ei tullut näkyviin tuohon listanäkymään.
+    Oli iso ongelma missä tuo CreateRepositoryModal komponentin tekemä uusi Repository objekti ei tullut näkyviin tuohon
+listanäkymään.
     Luulin että oli jotain "StateHasChanged" ongelmia ja niitä viljelin eri funktioihin joita EventCallback kutsuu.
     Ei onnistunut sillä.
     Gepti antoi perus WriteLine funktion jolla debugata.
