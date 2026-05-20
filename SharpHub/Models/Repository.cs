@@ -12,9 +12,9 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
+        public string Visibility { get; set; } = "Private"; // Default visibility is Private
         /*For later expansion
          * 
-         *public string Visibility { get; set; } = "Private"; // Default visibility is Private
          *public List<string> Collaborators { get; set; } = new List<string>();
         */
 
