@@ -1,4 +1,5 @@
-﻿@using MongoDB.Bson
+﻿@using LibGit2Sharp
+@using MongoDB.Bson
 @using SharpHub.Models
 @using SharpHub.Models.Services
 
@@ -6,9 +7,10 @@
 
 <div class="container mt-4">
 
-@if (ModalState)
+    @if (ModalState)
     {
-        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" @onclick="OnBackdropClick">
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);"
+             @onclick="OnBackdropClick">
             <div class="modal-dialog modal-dialog-centered" @onclick:stopPropagation="true">
                 <div class="modal-content shadow-lg">
                     <div class="modal-header">
@@ -17,73 +19,81 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <span class="fw-semibold">Are you sure you want to delete @Model.CurrentRepository.RepositoryName ?</span>
-                        </div>
-                        <div class="d-flex justify-content-end mt-3">
-                            <button class="btn btn-primary" @onclick="HandleDeletion" >Yes</button>
-                            <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
+                            <span class="fw-semibold">Are you sure you want to delete
+                                @Model.CurrentRepository.RepositoryName ?</span>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button class="btn btn-primary" @onclick="HandleDeletion">Yes</button>
+                                <button class="btn btn-outline-secondary ms-2" @onclick="HideModal">Cancel</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        }
+        <div class="mb-4">
+            <h1 class="fw-bold">@Model.CurrentRepository.RepositoryName</h1>
+            <p class="text-muted">@Model.CurrentRepository.Description</p>
         </div>
-    }
-    <div class="mb-4">
-        <h1 class="fw-bold">@Model.CurrentRepository.RepositoryName</h1>
-        <p class="text-muted">@Model.CurrentRepository.Description</p>
-    </div>
-    <div class="card mb-4">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">Clone or download as zip, this repository Tai vaikka delete</span>
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <span class="fw-semibold">Clone or download as zip, this repository Tai vaikka delete</span>
+            </div>
         </div>
-    </div>
-    <div class="card mb-4">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">Unohdin jo mikä tämäkin oli</span>
-            <button class="btn btn-sm btn-primary" @onclick="() => ShowModal()">Delete</button>
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <span class="fw-semibold">Unohdin jo mikä tämäkin oli</span>
+                <button class="btn btn-sm btn-primary" @onclick="() => ShowModal()">Delete</button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-header fw-semibold">
-                    Repository Tree
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header fw-semibold">
+                        Repository Tree
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">[ File tree placeholder ]</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p class="text-muted">[ File tree placeholder ]</p>
+            </div>
+            <div class="col-md-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-header fw-semibold">
+                        README.md
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">[ README content placeholder ]</p>
+                        <Markdown style="max-height: 437px;overflow-y:auto;">@markdown</Markdown>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8 mb-4">
-            <div class="card h-100">
-                <div class="card-header fw-semibold">
-                    README.md
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">[ README content placeholder ]</p>
-                    <Markdown style="max-height: 437px;overflow-y:auto;">@markdown</Markdown>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
 
 @code {
     [Parameter]
     public required RepositoryDetailsViewModel Model { get; set; }
 
-<!-- This is only for testing.
+    <!-- This is only for testing.
      It will fetch the repository README properly
 -->
     private string markdown = "# Heading 1\n## Heading 2\n\n![BlazorBootstrap](https://demos.blazorbootstrap.com/images/logo/logo-color.svg =50)";
 
     private bool ModalState;
-    protected override void OnAfterRender(bool firstRender)
+    <!-- protected override void OnAfterRender(bool firstRender) -->
+    <!-- { -->
+    <!--     if (firstRender) -->
+    <!--     { -->
+    <!--         StateHasChanged(); -->
+    <!--     } -->
+    <!-- } -->
+    protected override void OnParametersSet()
     {
-        if (firstRender)
-        {
-            StateHasChanged();
-        }
+        var repoPath = Model.CurrentRepository.RepositoryPath;
+
+
+        markdown = GetReadme();
     }
 
     private void ShowModal()
@@ -100,9 +110,10 @@
     {
         HideModal();
     }
+
     private void HandleDeletion()
     {
-        Model.CurrentRepository._id = ObjectId.Parse(Model.ObjectId);
+        Model.CurrentRepository._id = MongoDB.Bson.ObjectId.Parse(Model.ObjectId);
 
         Model.CurrentRepository.IsDeleted = true;
         MongoManipulator.Save(Model.CurrentRepository);
@@ -111,5 +122,31 @@
         Nav.NavigateTo("/RepositoryManager", forceLoad: true);
         HideModal();
         StateHasChanged();
+    }
+
+    private string GetReadme()
+    {
+        var repo = new LibGit2Sharp.Repository(Model.CurrentRepository.RepositoryPath);
+        var readmePath = Path.Combine(Model.CurrentRepository.RepositoryPath, "readme.md");
+        var commit = repo.Head.Tip;
+        if (commit == null)
+            return string.Empty;
+
+        var names = new[]
+        {
+            "README.md",
+            "readme.md",
+            "README"
+        };
+
+        foreach (var name in names)
+        {
+            var entry = commit[name];
+
+            if (entry?.Target is Blob blob)
+                return blob.GetContentText();
+        }
+
+        return string.Empty;
     }
 }
