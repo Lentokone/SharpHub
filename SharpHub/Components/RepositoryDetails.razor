@@ -138,7 +138,6 @@
             "readme.md",
             "README"
         };
-
         foreach (var name in names)
         {
             var entry = commit[name];
@@ -146,7 +145,6 @@
             if (entry?.Target is Blob blob)
                 return blob.GetContentText();
         }
-
         return string.Empty;
     }
 }

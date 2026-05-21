@@ -17,26 +17,17 @@ namespace SharpHub.Controllers
         public IActionResult Index()
         {
             var owner = User.Identity?.Name;
-            List<Repository>? repos;
             List<Repository> repositories = new();
 
             if (owner != null)
             {
-                repos = GetListOfRepositories(owner);
-                if (repos is { Count: > 0 })
-                {
-                    foreach (Repository r in repos)
-                    {
-                        if (!r.IsDeleted)
-                            repositories.Add(r);
-                    }
-                }
+                repositories = GetListOfRepositories(owner);
             }
             var vm = new RepositoryManagerViewModel
             {
                 Username = owner ?? "Unknown",
                 RepositoryDetailsViewModel = null,
-                RepositoryListViewModel = new RepositoryListViewModel { Repositories = repositories ?? new List<Repository>() }
+                RepositoryListViewModel = new RepositoryListViewModel { Repositories = repositories }
             };
 
             return View(vm);
@@ -89,7 +80,12 @@ namespace SharpHub.Controllers
 
             try
             {
-                return MongoManipulator.SearchAllRepositories(owner);
+                var list = MongoManipulator.SearchAllRepositories(owner);
+                var cleanList = new List<Repository>();
+                foreach (var repo in list)
+                    if (!repo.IsDeleted)
+                        cleanList.Add(repo);
+                return cleanList;
             }
             catch (Exception ex)
             {
