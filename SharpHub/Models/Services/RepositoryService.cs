@@ -2,16 +2,22 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SharpHub.Models.Services
 {
-    public static class RepositoryService
+    public static partial class RepositoryService
     {
         private const string REPO_BASE_PATH = "/var/sharphub/repos";
 
         public static Repository CreateRepositoryCore(string repositoryName, string owner, string description)
         {
             if (string.IsNullOrWhiteSpace(repositoryName) || string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentException("Invalid repository input.");
+            }
+            repositoryName = repositoryName.Trim();
+            if (!ValidRepoNameRegex().IsMatch(repositoryName))
             {
                 throw new ArgumentException("Invalid repository input.");
             }
@@ -47,5 +53,8 @@ namespace SharpHub.Models.Services
         {
 
         }
+
+        [GeneratedRegex("^[a-zA-Z0-9_-]{1,100}$")]
+        private static partial Regex ValidRepoNameRegex();
     }
 }

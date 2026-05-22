@@ -74,26 +74,16 @@
 @code {
     [Parameter]
     public required RepositoryDetailsViewModel Model { get; set; }
-
-    <!-- This is only for testing.
-     It will fetch the repository README properly
--->
-    private string markdown = "# Heading 1\n## Heading 2\n\n![BlazorBootstrap](https://demos.blazorbootstrap.com/images/logo/logo-color.svg =50)";
+    private string markdown = "# No Readme file found";
 
     private bool ModalState;
-    <!-- protected override void OnAfterRender(bool firstRender) -->
-    <!-- { -->
-    <!--     if (firstRender) -->
-    <!--     { -->
-    <!--         StateHasChanged(); -->
-    <!--     } -->
-    <!-- } -->
     protected override void OnParametersSet()
     {
         var repoPath = Model.CurrentRepository.RepositoryPath;
+        var readmeContent = GetReadme();
 
-
-        markdown = GetReadme();
+        if (readmeContent.Length != 0)
+            markdown = GetReadme();
     }
 
     private void ShowModal()

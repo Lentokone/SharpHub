@@ -105,7 +105,6 @@ namespace SharpHub.Controllers
                     if (existingUser != null)
                     {
                         ModelState.AddModelError("Username", "Username already taken.");
-                        ViewData["ErrorMessage"] = "Username already taken.";
                     }
                 }
 
@@ -118,7 +117,6 @@ namespace SharpHub.Controllers
             if (duplicate != null)
             {
                 ModelState.AddModelError("Username", "Username already taken.");
-                ViewData["ErrorMessage"] = "Username already taken.";
                 vm.RegisterStatus = false;
                 return View("Index", responseVm);
             }

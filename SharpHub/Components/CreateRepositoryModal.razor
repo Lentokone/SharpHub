@@ -30,6 +30,7 @@
                         <label for="GitignoreTemplate" class="form-label">.gitignore Template</label>
                         <InputSelect id="GitignoreTemplate" class="form-select"
                                      @bind-Value="NewRepositoryInput.SelectedGitignore">
+                            <option value="">TODO: Make this work, as currently it does absolutely nothing.</option>
                             <option value="">TODO: Add more stuff</option>
                             <option value="">TODO: Maybe add checkboxes instead</option>
                             <option value="">TODO: Add general languages (ones that I use at least)</option>
@@ -66,6 +67,7 @@
     {
         await CloseModal.InvokeAsync();
     }
+
     private async Task HandleValidSubmit()
     {
         if (string.IsNullOrWhiteSpace(NewRepositoryInput.RepositoryName))
