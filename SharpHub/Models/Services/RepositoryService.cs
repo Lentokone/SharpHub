@@ -14,15 +14,13 @@ namespace SharpHub.Models.Services
         {
             if (string.IsNullOrWhiteSpace(repositoryName) || string.IsNullOrWhiteSpace(owner))
             {
-                throw new ArgumentException("Invalid repository input.");
+                throw new ArgumentException("Invalid given input.");
             }
             repositoryName = repositoryName.Trim();
-            if (!ValidRepoNameRegex().IsMatch(repositoryName))
+            if (!ValidRepoNameRegex().IsMatch(repositoryName) || !ValidRepoNameRegex().IsMatch(owner))
             {
-                throw new ArgumentException("Invalid repository input.");
+                throw new ArgumentException("Repository and owner strings did not pass Regex");
             }
-            // var repositoryPath = $"{REPO_BASE_PATH}/{owner}/{repositoryName}.git";
-            // var repositoryPath = Path.Combine(REPO_BASE_PATH, owner, $"{repositoryName}.git");
 
             if (MongoManipulator.RepositoryExists(owner, repositoryName))
             {
@@ -49,10 +47,6 @@ namespace SharpHub.Models.Services
             return newRepo;
         }
 
-        public static void DeleteRepository()
-        {
-
-        }
 
         [GeneratedRegex("^[a-zA-Z0-9_-]{1,100}$")]
         private static partial Regex ValidRepoNameRegex();

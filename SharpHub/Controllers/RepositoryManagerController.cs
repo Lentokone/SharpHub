@@ -59,25 +59,15 @@ namespace SharpHub.Controllers
             return View("Index", vm);
         }
 
-        /*
-         * -----------------
-         * TAG OF REDUNDANCY
-         * -----------------
-         */
         // Tulevaisuuden arvoikas Olli.
         // Muista tarkistaa mitä kirjoitat kun olet humalassa.
         // Ettet unohda mitään tyhmää.
-        //
-        // 26/02/2026
-        // Ei ole reedundantti
-        // Tärkeä kai, emt, mutta on käytössä
         public List<Repository> GetListOfRepositories(string owner)
         {
             if (string.IsNullOrEmpty(owner))
             {
                 throw new ArgumentException("Omistaja ei voi olla null tai tyhjä.");
             }
-
             try
             {
                 var list = MongoManipulator.SearchAllRepositories(owner);
@@ -92,19 +82,6 @@ namespace SharpHub.Controllers
                 Console.WriteLine($"Virhe haettaessa repositorioita omistajalla {owner}: {ex.Message}");
                 return [];
             }
-        }
-
-        // ?
-        /* ? REDUNDANT?*/
-        public IActionResult ChangeRepoDescription(Repository wantedRepo, string newDesc)
-        {
-            if (string.IsNullOrWhiteSpace(newDesc) || wantedRepo == null)
-            {
-                return BadRequest("Invalid input.");
-            }
-            wantedRepo.Description = newDesc;
-            MongoManipulator.Save(wantedRepo);
-            return Ok();
         }
     }
 }

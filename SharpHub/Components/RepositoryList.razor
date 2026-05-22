@@ -81,19 +81,3 @@
         HideModal();
     }
 }
-
-@* Good luck, Me! *@
-
-@* Luck is what I will need *@
-@*
-    Oli iso ongelma missä tuo CreateRepositoryModal komponentin tekemä uusi Repository objekti ei tullut näkyviin tuohon
-listanäkymään.
-    Luulin että oli jotain "StateHasChanged" ongelmia ja niitä viljelin eri funktioihin joita EventCallback kutsuu.
-    Ei onnistunut sillä.
-    Gepti antoi perus WriteLine funktion jolla debugata.
-        "Console.WriteLine($"Added: {NewRepo.RepositoryName}, total count: {repositories.Count}");"
-    Tuli huomattua että tuo "repositories" lista sanoi määräksi 1 vaikka oli monta oikeasti näkyvissä.
-    Hetki kesti ja menin katsomaan tämän komponentin "repositories" listaa ja huomasin "2 references".
-    Ne referencet tuli tuosta "AddToList" funktiosta...
-    En loppupeleissä siis käyttänyt tuota "repositories" listaa ollenkaan ja näkyvät repositiot tuli viewmodelin listalta.
- *@

@@ -9,6 +9,7 @@ namespace SharpHub.Models
         [MinLength(3)]
         [MaxLength(256)]
         [DisplayName("Username")]
+        [RegularExpression("^[a-zA-Z0-9_-]{1,100}$", ErrorMessage = "Name has invalid characters in it")]
         public string Username { get; set; } = string.Empty;
 
         [Required]

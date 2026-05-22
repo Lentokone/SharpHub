@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
 using SharpHub.Models.Services;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace SharpHub.Controllers
 {
-    public class AccountController : Controller
+    public partial class AccountController : Controller
     {
         public IActionResult Index()
         {
@@ -34,13 +35,12 @@ namespace SharpHub.Controllers
 
                 if (vastaavuus != null)
                 {
-                    // Voi olla joko vm.Password tai loginman.password
                     if (vastaavuus.Password == vm.Password)
                     {
                         var claims = new List<Claim>
                         {
-                            new Claim(ClaimTypes.Name, vm.Username),
-                            new Claim(ClaimTypes.NameIdentifier, vastaavuus._id.ToString())
+                            new(ClaimTypes.Name, vm.Username),
+                            new(ClaimTypes.NameIdentifier, vastaavuus._id.ToString())
 
                         };
                         var claimsIdentity = new ClaimsIdentity(
@@ -90,6 +90,11 @@ namespace SharpHub.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Register(UserRegisterViewModel vm)
         {
+            vm.Username = vm.Username.Trim();
+            if (UsernameRegex().IsMatch(vm.Username))
+            {
+                ModelState.AddModelError("Username", "Username contains characters that are not allowed.");
+            }
             var responseVm = new AccountIndexViewModel
             {
                 Register = vm,
@@ -98,7 +103,6 @@ namespace SharpHub.Controllers
 
             if (!ModelState.IsValid)
             {
-                // You can still check username availability as an extra step, but maybe unnecessary here
                 if (!string.IsNullOrWhiteSpace(vm.Username))
                 {
                     var existingUser = MongoManipulator.Search(new User { Username = vm.Username });
@@ -112,7 +116,6 @@ namespace SharpHub.Controllers
                 return View("Index", responseVm);
             }
 
-            // Check if username is taken
             var duplicate = MongoManipulator.Search(new User { Username = vm.Username });
             if (duplicate != null)
             {
@@ -130,5 +133,8 @@ namespace SharpHub.Controllers
             responseVm.Register.RegisterStatus = true;
             return View("Index", responseVm);
         }
+
+        [GeneratedRegex("^[a-zA-Z0-9_-]{1,100}$")]
+        private static partial Regex UsernameRegex();
     }
 }
