@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
 using SharpHub.Models.Services;
-using System;
-using System.Runtime.ConstrainedExecution;
 
 namespace SharpHub.Controllers
 {
@@ -10,12 +8,6 @@ namespace SharpHub.Controllers
     [Route("api/cli/auth")]
     public class SharpGitController : Controller
     {
-        // No ei varmaan järjestystä enää.
-        // 27/08/2025
-
-
-        //   http://localhost:5227/api/cli/auth/consolelogin
-
         // Tässä parempi komento testata
         // curl -H "Content-Type: application/json" -d "monkey" https://localhost:7173/api/cli/auth/consolelogin
         // Powershit käyttääkin invoke-restmethod jolla on vaan "curl" alias jostain syystä
@@ -26,12 +18,18 @@ namespace SharpHub.Controllers
         //
         // Ajan 19.05. 14:06 Olli
         // Jotain
-        [HttpPost("consolelogin")]
+
+
+        // Refactor this whole function
+        //
+        // Things it will need:
+        // Ok logic
+        // SSH key storing
+        // Proper login check
+        // Proper returns
+        [HttpPost("login")]
         public IActionResult ConsoleLogin([FromBody] UserLoginForCLI cliLoginContent)
         {
-            // Testaus string
-            string monkey = "monkey balls";
-
             if (cliLoginContent != null)
             {
                 var clilogin = new User
@@ -42,30 +40,18 @@ namespace SharpHub.Controllers
                 var vastaavuus = MongoManipulator.Search(clilogin);
                 if (vastaavuus == null || vastaavuus.Password != cliLoginContent.Password)
                 {
-                    return BadRequest("Invalid login credentials.");
+                    return Unauthorized("Invalid credentials.");
                 }
-                if (vastaavuus != null)
-                {
-                    // Tähän tarkistus onko se repo tämän käyttäjän.
-                    monkey = $"User {vastaavuus.Username} authenticated successfully.";
-
-                }
-                else { monkey = "Joku ei toiminut"; }
-                //monkey = clilogin.Username.ToString();
 
 
-                return Ok(monkey);
+                return Ok("Login successful");
             }
             else
             {
-                return Ok(monkey);
+                return BadRequest("Bad input");
             }
         }
 
-        public static void DestroySSHKey()
-        {
-
-        }
 
         // Ancient code
 
