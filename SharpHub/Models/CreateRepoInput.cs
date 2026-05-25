@@ -9,7 +9,7 @@ namespace SharpHub.Models
         [RegularExpression("^[a-zA-Z0-9_-]{1,100}$", ErrorMessage = "Name has invalid characters in it")]
         public string RepositoryName { get; set; } = "";
 
-        [StringLength(100)]
+        [StringLength(300)]
         public string Description { get; set; } = "";
         public string SelectedGitignore { get; set; } = "";
 
