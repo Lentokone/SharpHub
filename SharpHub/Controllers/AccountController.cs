@@ -91,7 +91,7 @@ namespace SharpHub.Controllers
         public IActionResult Register(UserRegisterViewModel vm)
         {
             vm.Username = vm.Username.Trim();
-            if (UsernameRegex().IsMatch(vm.Username))
+            if (!UsernameRegex().IsMatch(vm.Username))
             {
                 ModelState.AddModelError("Username", "Username contains characters that are not allowed.");
             }

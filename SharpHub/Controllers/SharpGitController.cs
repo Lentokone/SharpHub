@@ -43,7 +43,7 @@ namespace SharpHub.Controllers
                     return Unauthorized("Invalid credentials.");
                 }
                 Console.WriteLine(cliLoginContent.SSHKey);
-
+                Console.WriteLine(Directory.Exists("/home/welho/.ssh"));
                 return Ok("Login successful");
             }
             else
