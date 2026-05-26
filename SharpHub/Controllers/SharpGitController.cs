@@ -4,7 +4,7 @@ using SharpHub.Models.Services;
 
 namespace SharpHub.Controllers
 {
-    [RequireHttps]
+    // [RequireHttps]
     [Route("api/cli/auth")]
     public class SharpGitController : Controller
     {
@@ -42,7 +42,7 @@ namespace SharpHub.Controllers
                 {
                     return Unauthorized("Invalid credentials.");
                 }
-
+                Console.WriteLine(cliLoginContent.SSHKey);
 
                 return Ok("Login successful");
             }
