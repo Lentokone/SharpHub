@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SharpHub.Models;
 using SharpHub.Models.Services;
+using System;
+using System.IO;
 
 namespace SharpHub.Controllers
 {
@@ -42,8 +44,17 @@ namespace SharpHub.Controllers
                 {
                     return Unauthorized("Invalid credentials.");
                 }
+
+                //NOTE:
+                // Tähän SSH avain tallennus tietokantaan
+                // Sen ObjectId otetaan ja laitetaan se siihen authorized_keys kirjoitukseen
+
                 Console.WriteLine(cliLoginContent.SSHKey);
                 Console.WriteLine(Directory.Exists("/home/welho/.ssh"));
+                using (StreamWriter sw = System.IO.File.AppendText("/home/git/.ssh/authorized_keys"))
+                {
+                    sw.WriteLine();
+                }
                 return Ok("Login successful");
             }
             else
