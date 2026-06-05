@@ -52,7 +52,7 @@ namespace SharpHub.Models.Services
                 {
                     var filter = Builders<T>.Filter.Eq("_id", record._id);
                     var existingDocument = collection.Find(filter).FirstOrDefault();
-                    
+
                     if (existingDocument != null)
                     {
                         collection.ReplaceOne(filter, record);
@@ -61,7 +61,7 @@ namespace SharpHub.Models.Services
                     {
                         collection.InsertOne(record);
                     }
-                    
+
                 }
             }
 
@@ -76,7 +76,7 @@ namespace SharpHub.Models.Services
         {
             var MongoTable = GetDB().GetCollection<T>(typeof(T).Name);
 
-            if(record._id != ObjectId.Empty)
+            if (record._id != ObjectId.Empty)
             {
                 var filterById = Builders<T>.Filter.Eq("_id", record._id);
                 return MongoTable.Find(filterById).FirstOrDefault() ?? throw new ArgumentException($"Ei löytynyt dokumenttia ID:llä {record._id} luokasta {typeof(T).Name}.");
@@ -123,10 +123,10 @@ namespace SharpHub.Models.Services
                 Builders<Repository>.Filter.Eq(r => r.Owner, username),
                 Builders<Repository>.Filter.Eq(r => r.IsDeleted, false)
             );
-           
+
             return MongoTable.Find(filter).FirstOrDefault();
         }
-        
+
         public static List<string> SearchAllRepositoryNames(string userName)
         {
             var MongoTable = GetDB().GetCollection<Repository>("Repository");

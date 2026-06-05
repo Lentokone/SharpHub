@@ -51,9 +51,18 @@ namespace SharpHub.Controllers
 
                 Console.WriteLine(cliLoginContent.SSHKey);
                 Console.WriteLine(Directory.Exists("/home/welho/.ssh"));
-                using (StreamWriter sw = System.IO.File.AppendText("/home/git/.ssh/authorized_keys"))
+                try
                 {
-                    sw.WriteLine();
+
+                    using (StreamWriter sw = System.IO.File.AppendText("/home/git/.ssh/authorized_keys"))
+                    {
+                        sw.WriteLine();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Shit's borked" + ex.Message);
+
                 }
                 return Ok("Login successful");
             }
