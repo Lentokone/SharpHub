@@ -1,14 +1,7 @@
-# FSWADP_MVC_side
-This is for Fullstack Webdev course. The MVC side of the project
+# SharpHub
 
-Testing post-receive hook on home server
+This is a bootleg Github
 
-Still testing hook
+A simple, self-hosted service for uploading, storing, viewing, managing, Git repositories
 
-Should be last and working test
-
-Now possibly last test for post-receive hook
-
-Now last test?
-
-Quick test for the server
+It is made in C# and it is a Dotnet MVC Blazor component frankenstein hybrid something-or-other project.
