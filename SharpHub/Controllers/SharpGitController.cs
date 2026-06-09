@@ -49,15 +49,25 @@ namespace SharpHub.Controllers
                 // Tähän SSH avain tallennus tietokantaan
                 // Sen ObjectId otetaan ja laitetaan se siihen authorized_keys kirjoitukseen
 
-                Console.WriteLine(cliLoginContent.SSHKey);
-                Console.WriteLine(Directory.Exists("/home/welho/.ssh"));
+                // Mister minä
+                //
+                // Tähänhän tarvitsee authorized_keys luku ettei mennä samaa avainta tunkemaan.
+                // 2 asiaa
+                // 1. if authorized_keys exists
+                // 2. if string not in authorized_keys
                 try
                 {
+                    string auth_keys_path = "/home/git/.ssh/authorized_keys";
+                    string auth_keys = System.IO.File.ReadAllText(auth_keys_path);
 
-                    using (StreamWriter sw = System.IO.File.AppendText("/home/git/.ssh/authorized_keys"))
-                    {
-                        sw.WriteLine();
-                    }
+                    //NOTE: Tähän jokin joka rakentaa sen SSH key string mikä append authorized_keys
+                    // Eli < shell > < KeyiwID > <SSH key in string format>
+
+                    if (!auth_keys.Contains("test"))
+                        using (StreamWriter sw = System.IO.File.AppendText(auth_keys_path))
+                        {
+                            sw.WriteLine();
+                        }
                 }
                 catch (Exception ex)
                 {
