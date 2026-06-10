@@ -61,7 +61,6 @@ namespace SharpHub.Models.Services
                     {
                         collection.InsertOne(record);
                     }
-
                 }
             }
 

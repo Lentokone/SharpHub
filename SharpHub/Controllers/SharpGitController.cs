@@ -62,17 +62,16 @@ namespace SharpHub.Controllers
 
                     //NOTE: Tähän jokin joka rakentaa sen SSH key string mikä append authorized_keys
                     // Eli < shell > < KeyiwID > <SSH key in string format>
-
-                    if (!auth_keys.Contains("test"))
+                    string SSHkeyLine = "";
+                    if (!auth_keys.Contains(SSHkeyLine))
                         using (StreamWriter sw = System.IO.File.AppendText(auth_keys_path))
                         {
-                            sw.WriteLine();
+                            sw.WriteLine(SSHkeyLine);
                         }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Shit's borked" + ex.Message);
-
+                    return BadRequest("Writing key into authorized_keys failed" + ex.Message);
                 }
                 return Ok("Login successful");
             }
