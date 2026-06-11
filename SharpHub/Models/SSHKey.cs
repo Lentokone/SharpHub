@@ -1,10 +1,15 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace SharpHub.Models
 {
     public class SSHKey : DB_SaveableObject
     {
-        public string UserID { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-public DateTime CreatedAt { get; set; }
-        public SSHKey() { }
+        [BsonId]
+        public ObjectId UserID { get; set; }
+
+        public string PublicKey { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public bool Revoked { get; set; } = false;
     }
 }

@@ -14,21 +14,7 @@ namespace SharpHub.Controllers
         // curl -H "Content-Type: application/json" -d "monkey" https://localhost:7173/api/cli/auth/consolelogin
         // Powershit käyttääkin invoke-restmethod jolla on vaan "curl" alias jostain syystä
 
-        // Ajan 22.11. 0:34 Olli
-        // Eli tämä on se endpoint johon SharpGit lähettää kirjautumistiedot
-        // Ja palauttaa refresh token.
-        //
-        // Ajan 19.05. 14:06 Olli
-        // Jotain
 
-
-        // Refactor this whole function
-        //
-        // Things it will need:
-        // Ok logic
-        // SSH key storing
-        // Proper login check
-        // Proper returns
         [HttpPost("login")]
         public IActionResult ConsoleLogin([FromBody] UserLoginForCLI cliLoginContent)
         {
@@ -45,24 +31,18 @@ namespace SharpHub.Controllers
                     return Unauthorized("Invalid credentials.");
                 }
 
-                //NOTE:
-                // Tähän SSH avain tallennus tietokantaan
-                // Sen ObjectId otetaan ja laitetaan se siihen authorized_keys kirjoitukseen
+                var sshKey = new SSHKey
+                {
+                    UserID = vastaavuus._id,
+                    PublicKey = cliLoginContent.SSHKey,
+                };
 
-                // Mister minä
-                //
-                // Tähänhän tarvitsee authorized_keys luku ettei mennä samaa avainta tunkemaan.
-                // 2 asiaa
-                // 1. if authorized_keys exists
-                // 2. if string not in authorized_keys
                 try
                 {
                     string auth_keys_path = "/home/git/.ssh/authorized_keys";
                     string auth_keys = System.IO.File.ReadAllText(auth_keys_path);
 
-                    //NOTE: Tähän jokin joka rakentaa sen SSH key string mikä append authorized_keys
-                    // Eli < shell > < KeyiwID > <SSH key in string format>
-                    string SSHkeyLine = "";
+                    string SSHkeyLine = $"command=\"/usr/local/bin/sharphub-shell keyId={sshKey._id}\",no-port-forwarding,no-agent-forwarding,no-X11-forwarding,no-pty {cliLoginContent.SSHKey}";
                     if (!auth_keys.Contains(SSHkeyLine))
                         using (StreamWriter sw = System.IO.File.AppendText(auth_keys_path))
                         {
